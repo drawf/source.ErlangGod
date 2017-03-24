@@ -1,6 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/yc_blue5_primary</color>
+    <color name="colorPrimaryDark">@color/yc_blue6</color>
+    <color name="colorAccent">@color/yc_blue5_primary</color>
+
+    <color name="light_blue_200">#81D4FA</color>
+    <color name="light_blue_500">#03A9F4</color>
+    <color name="light_blue_700">#0288D1</color>
+
+    <color name="textColorPrimary">#ffffff</color>
+
+    <color name="action_bar_blue">#03A9F4</color>
+    <color name="clr_line">#d8d8d8</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="clr_setting_text">#4a4a4a</color>
+    <color name="clr_setting_exit">#dd381d</color>
+    <color name="bg_setting_page">#f2f6f7</color>
+    <color name="clr_setting_content_text">#9b9b9b</color>
+    <color name="clr_home_cell_text">#4a4a4a</color>
+
+    <color name="divider_line">@color/yc_gray2</color>
+    <color name="divider_low">@color/yc_gray1</color>
+    <color name="divider_mid">#e8e8e8</color>
+    <color name="divider_high">@color/yc_gray2</color>
+
+    <!-- topic 界面 -->
+    <color name="topic_group_bg_color">#e1e5e6</color>
+    <color name="topic_name_color">#4a4a4a</color>
+    <color name="topic_lead_off_line_bg">#ffc107</color>
+    <color name="topic_video_count_color">#9b9b9b</color>
+    <color name="video_type_elementary_bg">#03A9F4</color>
+    <color name="video_type_advance_bg">#ffc107</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="clr_quick_learn_normal">#ffffff</color>
+    <color name="clr_quick_learn_pressed">#cdffffff</color>
+    <color name="clr_main">#03A9F4</color>
+    <color name="clr_main_pressed">#cd03a9f4</color>
+    <color name="clr_gray">#efefef</color>
+    <color name="clr_star_yellow">#fbb430</color>
+    <color name="clr_star_gray">#d6d6d6</color>
+    <color name="clr_gray_pressed">#cd757575</color>
+
+    <color name="play_video_main_transparent">#bb000000</color>
+
+    <color name="white_40alpha">#99ffffff</color>
+
+    <drawable name="clr_line">#d8d8d8</drawable>
+    <drawable name="yc_gray1">#f3f3f3</drawable>
+
+    <!-- 洋葱灰-->
+    <color name="yc_gray1">#f3f3f3</color>
+    <color name="yc_gray2">#dadada</color>
+    <color name="yc_gray3">#bebebe</color>
+    <color name="yc_gray4">#a2a2a2</color>
+    <color name="yc_gray5_primary">#888888</color>
+    <color name="yc_gray6">#6a6a6a</color>
+    <color name="yc_gray7">#3b3b3b</color>
+
+    <!-- 洋葱蓝-->
+    <color name="yc_blue1">#e5f8ff</color>
+    <color name="yc_blue2">#bbe7f6</color>
+    <color name="yc_blue3">#60bdf1</color>
+    <color name="yc_blue4">#2da9ee</color>
+    <color name="yc_blue5_primary">#1797EB</color>
+    <!--<color name="yc_blue5_primary">#1696ea</color>-->
+    <color name="yc_blue6">#117ed1</color>
+
+    <!-- 洋葱绿-->
+    <color name="yc_green1">#f3ffdb</color>
+    <color name="yc_green2">#d9f1a6</color>
+    <color name="yc_green3">#b6df76</color>
+    <color name="yc_green4">#8fcb31</color>
+    <color name="yc_green5_primary">#6FB906</color>
+    <!--<color name="yc_green5_primary">#6eb805</color>-->
+    <color name="yc_green6">#549a40</color>
+
+    <!-- 洋葱蓝-->
+    <color name="yc_red1">#fff1ef</color>
+    <color name="yc_red2">#ffd1cb</color>
+    <color name="yc_red3">#ff9576</color>
+    <color name="yc_red4">#f1572e</color>
+    <color name="yc_red5_primary">#E14D18</color>
+    <!--<color name="yc_red5_primary">#e14116</color>-->
+    <color name="yc_red6">#c82a00</color>
+
+    <!-- 洋葱黄-->
+    <color name="yc_ylw1">#fff8ce</color>
+    <color name="yc_ylw2">#ffec93</color>
+    <color name="yc_ylw3">#ffde59</color>
+    <color name="yc_ylw4">#fbcf00</color>
+    <color name="yc_ylw5_primary">#ffd600</color>
+    <color name="yc_ylw6">#eeaf00</color>
+
+    <!--洋葱紫-->
+    <color name="yc_purple1">#faf2fc</color>
+    <color name="yc_purple2">#eecbf7</color>
+    <color name="yc_purple3">#d79ae2</color>
+    <color name="yc_purple4">#bd72cc</color>
+    <color name="yc_purple5_primary">#af58c1</color>
+    <color name="yc_purple6">#9944aa</color>
+
+    <!--洋葱棕-->
+    <color name="yc_brown1">#faf2fc</color>
+    <color name="yc_brown2">#f2d8c7</color>
+    <color name="yc_brown3">#e0a47c</color>
+    <color name="yc_brown4">#d17e46</color>
+    <color name="yc_brown5_primary">#c96409</color>
+    <color name="yc_brown6">#bf5506</color>
+
+
+    <!-- 洋葱纯色-->
+    <color name="yc_pure_white">#ffffff</color>
+    <color name="yc_pure_black">#000000</color>
+    <color name="yc_pure_transparent">#00000000</color>
+    <color name="yc_pure_subtransparent">#10000000</color>
+
+    <!-- 缓存下载 -->
+    <color name="yc_checkbox_available">@color/yc_gray5_primary</color>
+    <color name="yc_checkbox_unavailable">@color/yc_gray2</color>
+
+    <color name="task_detail_color_title">#74574e</color>
+    <color name="task_detail_color_detail">#9b7071</color>
+    <color name="task_content_highlight">#73574e</color>
+    <drawable name="task_topic_list_selector">#00000000</drawable>
+
+
 </resources>

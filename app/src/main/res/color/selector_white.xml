@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/white_40alpha" android:state_enabled="false"></item>
+    <item android:color="@color/yc_pure_white" android:state_pressed="false"></item>
+    <item android:color="@color/yc_gray2" android:state_pressed="true"></item>
+    <item android:color="@color/yc_pure_white"></item>
+</selector>

@@ -12,13 +12,14 @@ import android.view.WindowManager;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
+import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 /**
  * Created by drawf on 2017/3/22.
  * ------------------------------
  */
 
-public class VideoPlayerFragment extends Fragment {
+public class VideoPlayerFragment extends Fragment implements View.OnClickListener{
 
     public static VideoPlayerFragment newInstance() {
         return new VideoPlayerFragment();
@@ -51,7 +52,11 @@ public class VideoPlayerFragment extends Fragment {
     private void init() {
         mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(false).build());
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
-//        mBinding.videoView.setMediaController(null);
+        mediaControllerBoard = new MediaControllerBoard(getActivity());
+        mBinding.videoView.setMediaController(mediaControllerBoard);
+
+        mBinding.btnShow.setOnClickListener(this);
+        mBinding.btnHide.setOnClickListener(this);
     }
 
     @Override
@@ -72,4 +77,16 @@ public class VideoPlayerFragment extends Fragment {
         mBinding.videoView.stopPlayback();
     }
 
+    private MediaControllerBoard mediaControllerBoard;
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_show:
+                mediaControllerBoard.show();
+                break;
+            case R.id.btn_hide:
+                mediaControllerBoard.hide();
+                break;
+        }
+    }
 }

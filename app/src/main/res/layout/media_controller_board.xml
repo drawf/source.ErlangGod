@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -10,9 +11,12 @@
             android:id="@+id/include_top_bar"
             layout="@layout/media_controller_top_bar"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/include_bottom_bar"
+            layout="@layout/media_controller_bottom_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="dsfs"/>
+            android:layout_alignParentBottom="true"/>
+
     </RelativeLayout>
 </layout>

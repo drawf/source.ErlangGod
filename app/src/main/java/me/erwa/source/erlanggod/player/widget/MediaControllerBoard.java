@@ -82,6 +82,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
                 mBinding.includeTopBar.container.setVisibility(VISIBLE);
                 mBinding.includeTopBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_in_top));
             }
+            if (mBinding.includeBottomBar.container.getVisibility() != VISIBLE) {
+                mBinding.includeBottomBar.container.setVisibility(VISIBLE);
+                mBinding.includeBottomBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_in_bottom));
+            }
 
             mOperationShowing = true;
         }
@@ -94,6 +98,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             if (mBinding.includeTopBar.container.getVisibility() != GONE) {
                 mBinding.includeTopBar.container.setVisibility(GONE);
                 mBinding.includeTopBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_out_top));
+            }
+            if (mBinding.includeBottomBar.container.getVisibility() != GONE) {
+                mBinding.includeBottomBar.container.setVisibility(GONE);
+                mBinding.includeBottomBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_out_bottom));
             }
 
             mOperationShowing = false;

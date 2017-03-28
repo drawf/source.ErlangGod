@@ -7,7 +7,8 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/ic_media_controller_top_bar_bg">
+        android:background="@drawable/ic_media_controller_top_bar_bg"
+        android:clickable="true">
 
         <ImageButton
             android:id="@+id/ib_back"
@@ -53,6 +54,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/ib_share"
+            android:clickable="true"
             android:gravity="center"
             android:text="高清"
             android:textColor="@color/selector_white"

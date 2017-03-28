@@ -38,8 +38,7 @@
                     android:centerColor="#99ffffff"
                     android:centerY="0.75"
                     android:endColor="#99ffffff"
-                    android:startColor="#99ffffff"
-                    />
+                    android:startColor="#99ffffff"/>
             </shape>
         </clip>
     </item>
@@ -53,8 +52,7 @@
                     android:centerColor="@color/yc_blue5_primary"
                     android:centerY="0.75"
                     android:endColor="@color/yc_blue5_primary"
-                    android:startColor="@color/yc_blue5_primary"
-                    />
+                    android:startColor="@color/yc_blue5_primary"/>
             </shape>
         </clip>
     </item>

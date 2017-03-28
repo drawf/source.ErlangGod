@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@drawable/ic_media_controller_bottom_bar_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -27,6 +28,7 @@
             android:max="100"
             android:maxHeight="4dp"
             android:minHeight="4dp"
+            android:padding="20dp"
             android:progress="0"
             android:progressDrawable="@drawable/media_controller_progress"
             android:secondaryProgress="50"

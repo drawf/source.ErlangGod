@@ -1,5 +1,6 @@
 package me.erwa.source.erlanggod.player.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.media.AudioManager;
@@ -7,12 +8,11 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.PopupWindow;
 
 import com.pili.pldroid.player.IMediaController;
 
@@ -24,7 +24,7 @@ import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
  * ------------------------------
  */
 
-public class MediaControllerBoard extends FrameLayout implements IMediaController {
+public class MediaControllerBoard extends FrameLayout implements IMediaController, View.OnClickListener {
 
     public MediaControllerBoard(@NonNull Context context) {
         super(context);
@@ -42,8 +42,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
     private Context mContext;
     private AudioManager mAM;
-    private View mAnchor;
-    private PopupWindow mWindow;
+    private ViewGroup mAnchor;
     private MediaControllerBoardBinding mBinding;
 
     private boolean mInitFromXML;
@@ -52,15 +51,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     private static int sOperationTimeout = 5000;
 
     private void init(@NonNull Context context) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         mAM = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        if (!mInitFromXML) {
-            mWindow = new PopupWindow(mContext);
-            mWindow.setFocusable(false);
-            mWindow.setBackgroundDrawable(null);
-            mWindow.setOutsideTouchable(true);
-            mWindow.setTouchable(false);
-        }
     }
 
     //实现接口方法
@@ -123,16 +115,37 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
      */
     @Override
     public void setAnchorView(View view) {
-        this.mAnchor = view;
+        this.mAnchor = (ViewGroup) view;
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        this.mAnchor.addView(this, layoutParams);
+
         if (!mInitFromXML) {
             removeAllViews();
             mBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext),
                     R.layout.media_controller_board, null, false);
+            addView(mBinding.getRoot(), layoutParams);
 
-            mWindow.setContentView(mBinding.getRoot());
-            mWindow.setWidth(LayoutParams.MATCH_PARENT);
-            mWindow.setHeight(LayoutParams.MATCH_PARENT);
-            mWindow.showAtLocation(mAnchor, Gravity.CENTER, 0, 0);
+            initPlugins();
+        }
+    }
+
+    private void initPlugins() {
+        mBinding.includeTopBar.ibBack.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        int viewId = view.getId();
+        if (viewId == mBinding.includeTopBar.ibBack.getId()) {
+            onBackClick();
+        }
+    }
+
+    private void onBackClick() {
+        if (mContext instanceof Activity) {
+            ((Activity) mContext).finish();
         }
     }
 }

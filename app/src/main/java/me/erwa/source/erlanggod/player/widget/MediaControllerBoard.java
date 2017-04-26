@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.media.AudioManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +17,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.pili.pldroid.player.IMediaController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
@@ -40,15 +45,32 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         init(context);
     }
 
-    private Context mContext;
-    private AudioManager mAM;
+    public Context mContext;
+    public AudioManager mAM;
+    public MediaPlayerControl mPlayer;
+    public MediaControllerBoardBinding mBinding;
     private ViewGroup mAnchor;
-    private MediaControllerBoardBinding mBinding;
 
-    private boolean mInitFromXML;
+    private boolean mInitFromXML;//暂不支持从xml初始化
+    private List<IPlugin> mPlugins = new ArrayList<>();
+
     private boolean mOperationShowing;
-
     private static int sOperationTimeout = 5000;
+    private static final int FLAG_OPERATION_HIDE = 1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case FLAG_OPERATION_HIDE:
+                    hide();
+                    break;
+            }
+        }
+    };
+
+    public void removeOperationHide() {
+        mHandler.removeMessages(FLAG_OPERATION_HIDE);
+    }
 
     private void init(@NonNull Context context) {
         mContext = context;
@@ -58,7 +80,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     //实现接口方法
     @Override
     public void setMediaPlayer(MediaPlayerControl mediaPlayerControl) {
-
+        mPlayer = mediaPlayerControl;
     }
 
     @Override
@@ -81,6 +103,14 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
             mOperationShowing = true;
         }
+
+        //trigger hide when timeout
+        if (timeout > 0) {
+            mHandler.removeMessages(FLAG_OPERATION_HIDE);
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(FLAG_OPERATION_HIDE), timeout);
+        }
+
+        triggerPluginShow();
     }
 
     @Override
@@ -98,6 +128,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
             mOperationShowing = false;
         }
+
+        triggerPluginHide();
     }
 
     @Override
@@ -133,7 +165,9 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     private void initPlugins() {
         mBinding.includeTopBar.ibBack.setOnClickListener(this);
 
+        triggerPluginInit();
     }
+
 
     @Override
     public void onClick(View view) {
@@ -148,4 +182,42 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             ((Activity) mContext).finish();
         }
     }
+
+    public interface IPlugin {
+        void init(MediaControllerBoard board);
+
+        void onShow();
+
+        void onHide();
+    }
+
+    public void addPlugin(IPlugin plugin) {
+        mPlugins.add(plugin);
+    }
+
+    private void triggerPluginInit() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.init(this);
+            }
+        }
+    }
+
+    private void triggerPluginShow() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onShow();
+            }
+        }
+    }
+
+    private void triggerPluginHide() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onHide();
+            }
+        }
+    }
+
+
 }

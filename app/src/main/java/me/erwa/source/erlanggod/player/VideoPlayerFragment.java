@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
+import me.erwa.source.erlanggod.player.widget.plugin.ProgressBar;
 
 /**
  * Created by drawf on 2017/3/22.
@@ -54,6 +55,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
         mediaControllerBoard = new MediaControllerBoard(getActivity());
         mBinding.videoView.setMediaController(mediaControllerBoard);
+
+        mediaControllerBoard.addPlugin(ProgressBar.newInstance());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

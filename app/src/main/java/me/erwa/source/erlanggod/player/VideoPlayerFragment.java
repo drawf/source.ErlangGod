@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
+import me.erwa.source.erlanggod.player.widget.plugin.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.ProgressBar;
 
 /**
@@ -52,11 +53,13 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
     private void init() {
         mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(false).build());
+//        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
         mediaControllerBoard = new MediaControllerBoard(getActivity());
         mBinding.videoView.setMediaController(mediaControllerBoard);
 
         mediaControllerBoard.addPlugin(ProgressBar.newInstance());
+        mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
@@ -85,10 +88,12 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_show:
-                mediaControllerBoard.show();
+//                mediaControllerBoard.show();
+                mBinding.videoView.start();
                 break;
             case R.id.btn_hide:
-                mediaControllerBoard.hide();
+                mBinding.videoView.pause();
+//                mediaControllerBoard.hide();
                 break;
         }
     }

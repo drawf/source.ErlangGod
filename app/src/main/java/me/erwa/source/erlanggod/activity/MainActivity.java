@@ -12,6 +12,7 @@ import me.erwa.source.erlanggod.player.VideoPlayerFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    //https://developer.qiniu.com/pili/sdk/1210/the-android-client-sdk
     private ActivityMainBinding mBinding;
 
     @Override

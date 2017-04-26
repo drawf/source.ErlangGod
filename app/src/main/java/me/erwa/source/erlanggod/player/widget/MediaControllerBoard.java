@@ -17,12 +17,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.pili.pldroid.player.IMediaController;
+import com.pili.pldroid.player.PLMediaPlayer;
+import com.pili.pldroid.player.widget.PLVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
+import me.erwa.source.erlanggod.utils.LogUtils;
+import me.erwa.source.erlanggod.utils.ToastUtils;
 
 /**
  * Created by drawf on 2017/3/24.
@@ -150,6 +154,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         this.mAnchor = (ViewGroup) view;
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
+        if (this.getParent() != null) {
+            ViewGroup parent = (ViewGroup) this.getParent();
+            parent.removeView(this);
+        }
         this.mAnchor.addView(this, layoutParams);
 
         if (!mInitFromXML) {
@@ -159,13 +167,101 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             addView(mBinding.getRoot(), layoutParams);
 
             initPlugins();
+            initListener();
         }
+    }
+
+    private void initListener() {
+        final PLVideoView videoView = (PLVideoView) this.mAnchor.findViewById(R.id.video_view);
+
+        videoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
+                LogUtils.d("onInfo: " + what + ", " + extra);
+                triggerPluginOnInfoListener(plMediaPlayer, what, extra);
+                return false;
+            }
+        });
+
+        videoView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(PLMediaPlayer plMediaPlayer, int errorCode) {
+                boolean isNeedReconnect = false;
+                LogUtils.e("Error happened, errorCode = " + errorCode);
+                switch (errorCode) {
+                    case PLMediaPlayer.ERROR_CODE_INVALID_URI:
+                        LogUtils.e("Invalid URL !");
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
+                        LogUtils.e("404 resource not found !");
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
+                        LogUtils.e("Connection refused !");
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
+                        LogUtils.e("Connection timeout !");
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
+                        LogUtils.e("Empty playlist !");
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
+                        LogUtils.e("Stream disconnected !");
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_IO_ERROR:
+                        LogUtils.e("Network IO Error !");
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
+                        LogUtils.e("Unauthorized Error !");
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
+                        LogUtils.e("Prepare timeout !");
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
+                        LogUtils.e("Read frame timeout !");
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
+//                        setOptions(AVOptions.MEDIA_CODEC_SW_DECODE);
+                        isNeedReconnect = true;
+                        break;
+                    case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
+                        LogUtils.e("unknown error !");
+                        break;
+                    default:
+                        LogUtils.e("unknown error !");
+                        break;
+                }
+                // Todo pls handle the error status here, reconnect or call finish()
+                if (isNeedReconnect) {
+//                    sendReconnectMessage();
+                } else {
+//                    finish();
+                }
+                // Return true means the error has been handled
+                // If return false, then `onCompletion` will be called
+                return true;
+            }
+        });
+
+        videoView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(PLMediaPlayer plMediaPlayer) {
+                LogUtils.trace("onCompletion:"+videoView.getCurrentPosition()+"==>"+videoView.getDuration());
+                ToastUtils.show("播放完毕");
+                onBackClick();
+            }
+        });
     }
 
     private void initPlugins() {
         mBinding.includeTopBar.ibBack.setOnClickListener(this);
 
         triggerPluginInit();
+
     }
 
 
@@ -189,6 +285,12 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         void onShow();
 
         void onHide();
+
+        void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra);
+
+        void onErrorListener(PLMediaPlayer plMediaPlayer, int errorCode);
+
+        void onCompletionListener(PLMediaPlayer plMediaPlayer);
     }
 
     public void addPlugin(IPlugin plugin) {
@@ -215,6 +317,29 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.onHide();
+            }
+        }
+    }
+
+    private void triggerPluginOnInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onInfoListener(plMediaPlayer, what, extra);
+            }
+        }
+    }
+
+    private void triggerPluginOnErrorListener(PLMediaPlayer plMediaPlayer, int errorCode) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onErrorListener(plMediaPlayer, errorCode);
+            }
+        }
+    }
+    private void triggerPluginOnCompletionListener(PLMediaPlayer plMediaPlayer) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onCompletionListener(plMediaPlayer);
             }
         }
     }

@@ -19,9 +19,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 
-        <TextView
-            android:id="@+id/ib_back"
+        <include
+            android:id="@+id/include_loading_panel"
+            layout="@layout/media_controller_loading_panel"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <!--<TextView-->
+        <!--android:id="@+id/ib_back"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"/>-->
     </RelativeLayout>
 </layout>

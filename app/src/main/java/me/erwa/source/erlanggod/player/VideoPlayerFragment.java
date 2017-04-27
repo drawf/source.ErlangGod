@@ -14,6 +14,7 @@ import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.LoadingPanel;
+import me.erwa.source.erlanggod.player.widget.plugin.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.ProgressBar;
 
 /**
@@ -21,7 +22,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.ProgressBar;
  * ------------------------------
  */
 
-public class VideoPlayerFragment extends Fragment implements View.OnClickListener{
+public class VideoPlayerFragment extends Fragment implements View.OnClickListener {
 
     public static VideoPlayerFragment newInstance() {
         return new VideoPlayerFragment();
@@ -60,6 +61,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
         mediaControllerBoard.addPlugin(ProgressBar.newInstance());
         mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
+        mediaControllerBoard.addPlugin(PlayButton.newInstance());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
@@ -84,6 +86,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     }
 
     private MediaControllerBoard mediaControllerBoard;
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

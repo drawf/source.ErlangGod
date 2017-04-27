@@ -2,28 +2,27 @@ package me.erwa.source.erlanggod.player.widget.plugin;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.CallSuper;
 import android.widget.SeekBar;
 
-import com.pili.pldroid.player.PLMediaPlayer;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
-import me.erwa.source.erlanggod.utils.LogUtils;
 
 /**
  * Created by drawf on 26/04/2017.
  * ------------------------------
  */
 
-public class ProgressBar extends BasePlugin implements SeekBar.OnSeekBarChangeListener {
+public class ProgressBar extends BasePlugin<ProgressBar.IProgressBar> implements SeekBar.OnSeekBarChangeListener {
 
     public static ProgressBar newInstance() {
         return new ProgressBar();
     }
 
     private static final int FLAG_UPDATE_PROGRESS = 1;
+    private List<IProgressBar> mSubscribers = new ArrayList<>();
 
     private boolean mDragging;//拖动进度条时
     private Handler mHandler = new Handler() {
@@ -34,13 +33,13 @@ public class ProgressBar extends BasePlugin implements SeekBar.OnSeekBarChangeLi
                     updateProgress();
                     if (!mDragging && mPlayer.isPlaying()) {
                         sendMessageDelayed(obtainMessage(FLAG_UPDATE_PROGRESS), 1000);
+                        triggerPluginOnUpdateProgress();
                     }
                     break;
             }
         }
     };
 
-    @CallSuper
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);
@@ -57,10 +56,6 @@ public class ProgressBar extends BasePlugin implements SeekBar.OnSeekBarChangeLi
         mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
     }
 
-    @Override
-    public void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra) {
-
-    }
 
     private void updateProgress() {
         if (mPlayer == null || mDragging) return;
@@ -69,13 +64,13 @@ public class ProgressBar extends BasePlugin implements SeekBar.OnSeekBarChangeLi
         long duration = mPlayer.getDuration();
         if (duration > 0) {
             long pos = 1000L * position / duration;
-            LogUtils.trace(pos);
+//            LogUtils.trace(pos);
             mBinding.includeBottomBar.sbProgress.setProgress((int) pos);
         }
         mBinding.includeBottomBar.sbProgress.setSecondaryProgress(mPlayer.getBufferPercentage() * 10);
         mBinding.includeBottomBar.tvTime.setText(String.format("%s/%s", generateTime(position), generateTime(duration)));
 
-        LogUtils.trace("%s,,%s", position, duration);
+//        LogUtils.trace("%s,,%s", position, duration);
     }
 
     private String generateTime(long position) {
@@ -117,5 +112,22 @@ public class ProgressBar extends BasePlugin implements SeekBar.OnSeekBarChangeLi
     private long calculateNewPosition(long duration, int progress) {
         long position = duration * progress / 1000L;
         return (duration - position) < 9000 ? duration - 9000 : position;
+    }
+
+    public interface IProgressBar {
+        void onUpdateProgress();
+    }
+
+    @Override
+    public void addSubscriber(IProgressBar plugin) {
+        mSubscribers.add(plugin);
+    }
+
+    private void triggerPluginOnUpdateProgress() {
+        if (!mSubscribers.isEmpty()) {
+            for (IProgressBar p : mSubscribers) {
+                p.onUpdateProgress();
+            }
+        }
     }
 }

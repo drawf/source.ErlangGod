@@ -21,6 +21,7 @@ import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
@@ -177,7 +178,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         videoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
-                LogUtils.d("onInfo: " + what + ", " + extra);
                 triggerPluginOnInfoListener(plMediaPlayer, what, extra);
                 return false;
             }
@@ -186,61 +186,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         videoView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int errorCode) {
-                boolean isNeedReconnect = false;
-                LogUtils.e("Error happened, errorCode = " + errorCode);
-                switch (errorCode) {
-                    case PLMediaPlayer.ERROR_CODE_INVALID_URI:
-                        LogUtils.e("Invalid URL !");
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
-                        LogUtils.e("404 resource not found !");
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
-                        LogUtils.e("Connection refused !");
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
-                        LogUtils.e("Connection timeout !");
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
-                        LogUtils.e("Empty playlist !");
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
-                        LogUtils.e("Stream disconnected !");
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_IO_ERROR:
-                        LogUtils.e("Network IO Error !");
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
-                        LogUtils.e("Unauthorized Error !");
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
-                        LogUtils.e("Prepare timeout !");
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
-                        LogUtils.e("Read frame timeout !");
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
-//                        setOptions(AVOptions.MEDIA_CODEC_SW_DECODE);
-                        isNeedReconnect = true;
-                        break;
-                    case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
-                        LogUtils.e("unknown error !");
-                        break;
-                    default:
-                        LogUtils.e("unknown error !");
-                        break;
-                }
-                // Todo pls handle the error status here, reconnect or call finish()
-                if (isNeedReconnect) {
-//                    sendReconnectMessage();
-                } else {
-//                    finish();
-                }
+                triggerPluginOnErrorListener(plMediaPlayer, errorCode);
                 // Return true means the error has been handled
                 // If return false, then `onCompletion` will be called
                 return true;
@@ -250,9 +196,18 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         videoView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(PLMediaPlayer plMediaPlayer) {
-                LogUtils.trace("onCompletion:"+videoView.getCurrentPosition()+"==>"+videoView.getDuration());
+                triggerPluginOnCompletionListener(plMediaPlayer);
+
+                LogUtils.trace("onCompletion:" + videoView.getCurrentPosition() + "==>" + videoView.getDuration());
                 ToastUtils.show("播放完毕");
                 onBackClick();
+            }
+        });
+
+        videoView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(PLMediaPlayer plMediaPlayer) {
+                triggerPluginOnPreparedListener(plMediaPlayer);
             }
         });
     }
@@ -279,7 +234,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         }
     }
 
-    public interface IPlugin {
+    public interface IPlugin<T> {
         void init(MediaControllerBoard board);
 
         void onShow();
@@ -291,9 +246,26 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         void onErrorListener(PLMediaPlayer plMediaPlayer, int errorCode);
 
         void onCompletionListener(PLMediaPlayer plMediaPlayer);
+
+        void onPreparedListener(PLMediaPlayer plMediaPlayer);
+
+        void addSubscriber(T plugin);
     }
 
     public void addPlugin(IPlugin plugin) {
+        addPlugin(plugin, null);
+    }
+
+    public void addPlugin(IPlugin plugin, Class... clazz) {
+        if (clazz != null && !mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                for (Class c : Arrays.asList(clazz)) {
+                    if (p.getClass().equals(c)) {
+                        p.addSubscriber(plugin);
+                    }
+                }
+            }
+        }
         mPlugins.add(plugin);
     }
 
@@ -336,10 +308,19 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             }
         }
     }
+
     private void triggerPluginOnCompletionListener(PLMediaPlayer plMediaPlayer) {
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.onCompletionListener(plMediaPlayer);
+            }
+        }
+    }
+
+    private void triggerPluginOnPreparedListener(PLMediaPlayer plMediaPlayer) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onPreparedListener(plMediaPlayer);
             }
         }
     }

@@ -25,6 +25,7 @@ public class LoadingPanel extends BasePlugin {
 
     @Override
     public void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra) {
+        super.onInfoListener(plMediaPlayer, what, extra);
         switch (what) {
             case PLMediaPlayer.MEDIA_INFO_BUFFERING_START:
                 togglePanel(true);

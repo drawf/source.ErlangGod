@@ -1,8 +1,8 @@
 package me.erwa.source.erlanggod.player.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +13,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.pili.pldroid.player.IMediaController;
@@ -25,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
-import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
 import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.ToastUtils;
 
@@ -34,11 +32,11 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
  * ------------------------------
  */
 
-public class MediaControllerBoard extends FrameLayout implements IMediaController, View.OnClickListener {
+public class MediaControllerBoard extends FrameLayout implements IMediaController {
 
-    public MediaControllerBoard(@NonNull Context context) {
+    public MediaControllerBoard(@NonNull Context context, @NonNull int layoutId) {
         super(context);
-        init(context);
+        init(context, layoutId);
     }
 
     public MediaControllerBoard(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -47,15 +45,17 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
     public MediaControllerBoard(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        mInitFromXML = true;
+        init(context, 0);
     }
 
     public Context mContext;
     public AudioManager mAM;
     public MediaPlayerControl mPlayer;
-    public MediaControllerBoardBinding mBinding;
-    private ViewGroup mAnchor;
+    public ViewDataBinding mBinding;
 
+    private ViewGroup mAnchor;
+    private int mLayoutId;
     private boolean mInitFromXML;//暂不支持从xml初始化
     private List<IPlugin> mPlugins = new ArrayList<>();
 
@@ -77,8 +77,9 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         mHandler.removeMessages(FLAG_OPERATION_HIDE);
     }
 
-    private void init(@NonNull Context context) {
+    private void init(@NonNull Context context, int layoutId) {
         mContext = context;
+        mLayoutId = layoutId;
         mAM = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
     }
 
@@ -96,16 +97,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     @Override
     public void show(int timeout) {
         if (!mOperationShowing) {
-
-            if (mBinding.includeTopBar.container.getVisibility() != VISIBLE) {
-                mBinding.includeTopBar.container.setVisibility(VISIBLE);
-                mBinding.includeTopBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_in_top));
-            }
-            if (mBinding.includeBottomBar.container.getVisibility() != VISIBLE) {
-                mBinding.includeBottomBar.container.setVisibility(VISIBLE);
-                mBinding.includeBottomBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_in_bottom));
-            }
-
             mOperationShowing = true;
         }
 
@@ -121,20 +112,18 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     @Override
     public void hide() {
         if (mOperationShowing) {
-
-            if (mBinding.includeTopBar.container.getVisibility() != GONE) {
-                mBinding.includeTopBar.container.setVisibility(GONE);
-                mBinding.includeTopBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_out_top));
-            }
-            if (mBinding.includeBottomBar.container.getVisibility() != GONE) {
-                mBinding.includeBottomBar.container.setVisibility(GONE);
-                mBinding.includeBottomBar.container.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_out_bottom));
-            }
-
             mOperationShowing = false;
         }
 
         triggerPluginHide();
+    }
+
+    public void onPause() {
+        triggerPluginLifePause();
+    }
+
+    public void onResume() {
+        triggerPluginLifeResume();
     }
 
     @Override
@@ -163,12 +152,13 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
         if (!mInitFromXML) {
             removeAllViews();
-            mBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext),
-                    R.layout.media_controller_board, null, false);
+            mBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), mLayoutId, null, false);
             addView(mBinding.getRoot(), layoutParams);
 
             initPlugins();
             initListener();
+        } else {
+            throw new RuntimeException("I don't support init from XML!");
         }
     }
 
@@ -200,7 +190,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
                 LogUtils.trace("onCompletion:" + videoView.getCurrentPosition() + "==>" + videoView.getDuration());
                 ToastUtils.show("播放完毕");
-                onBackClick();
             }
         });
 
@@ -213,28 +202,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     }
 
     private void initPlugins() {
-        mBinding.includeTopBar.ibBack.setOnClickListener(this);
-
         triggerPluginInit();
-
     }
 
-
-    @Override
-    public void onClick(View view) {
-        int viewId = view.getId();
-        if (viewId == mBinding.includeTopBar.ibBack.getId()) {
-            onBackClick();
-        }
-    }
-
-    private void onBackClick() {
-        if (mContext instanceof Activity) {
-            ((Activity) mContext).finish();
-        }
-    }
-
-    public interface IPlugin<T> {
+    public interface IPlugin<P> {
         void init(MediaControllerBoard board);
 
         void onShow();
@@ -249,13 +220,19 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
         void onPreparedListener(PLMediaPlayer plMediaPlayer);
 
-        void addSubscriber(T plugin);
+        void addSubscriber(P plugin);
+
+        void onLifePause();
+
+        void onLifeResume();
     }
 
-    public void addPlugin(IPlugin plugin) {
-        addPlugin(plugin, null);
-    }
-
+    /**
+     * 用于MediaControllerBoard添加插件
+     *
+     * @param plugin 插件
+     * @param clazz  要订阅的插件
+     */
     public void addPlugin(IPlugin plugin, Class... clazz) {
         if (clazz != null && !mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
@@ -325,5 +302,20 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         }
     }
 
+    private void triggerPluginLifePause() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onLifePause();
+            }
+        }
+    }
+
+    private void triggerPluginLifeResume() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onLifeResume();
+            }
+        }
+    }
 
 }

@@ -13,9 +13,12 @@ import android.view.WindowManager;
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
-import me.erwa.source.erlanggod.player.widget.plugin.LoadingPanel;
-import me.erwa.source.erlanggod.player.widget.plugin.PlayButton;
-import me.erwa.source.erlanggod.player.widget.plugin.ProgressBar;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.BackButton;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 
 /**
  * Created by drawf on 2017/3/22.
@@ -56,12 +59,15 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(false).build());
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
-        mediaControllerBoard = new MediaControllerBoard(getActivity());
+        mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
         mBinding.videoView.setMediaController(mediaControllerBoard);
 
         mediaControllerBoard.addPlugin(ProgressBar.newInstance());
         mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
         mediaControllerBoard.addPlugin(PlayButton.newInstance());
+        mediaControllerBoard.addPlugin(Download.newInstance());
+        mediaControllerBoard.addPlugin(OperationBar.newInstance());
+        mediaControllerBoard.addPlugin(BackButton.newInstance());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
@@ -70,13 +76,13 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        mBinding.videoView.start();
+        mediaControllerBoard.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mBinding.videoView.pause();
+        mediaControllerBoard.onPause();
     }
 
     @Override

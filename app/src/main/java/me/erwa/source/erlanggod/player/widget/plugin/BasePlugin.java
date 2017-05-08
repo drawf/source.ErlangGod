@@ -1,11 +1,12 @@
 package me.erwa.source.erlanggod.player.widget.plugin;
 
+import android.content.Context;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
 
 import com.pili.pldroid.player.IMediaController;
 import com.pili.pldroid.player.PLMediaPlayer;
 
-import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.utils.LogUtils;
 
@@ -14,18 +15,20 @@ import me.erwa.source.erlanggod.utils.LogUtils;
  * ------------------------------
  */
 
-public class BasePlugin<T> implements MediaControllerBoard.IPlugin<T> {
+public class BasePlugin<B extends ViewDataBinding, P> implements MediaControllerBoard.IPlugin<P> {
 
     protected MediaControllerBoard mBoard;
+    protected Context mContext;
     protected IMediaController.MediaPlayerControl mPlayer;
-    protected MediaControllerBoardBinding mBinding;
+    protected B mBinding;
 
     @CallSuper
     @Override
     public void init(MediaControllerBoard board) {
         this.mBoard = board;
+        this.mContext = board.mContext;
         this.mPlayer = board.mPlayer;
-        this.mBinding = board.mBinding;
+        this.mBinding = (B) board.mBinding;
     }
 
     @Override
@@ -115,7 +118,17 @@ public class BasePlugin<T> implements MediaControllerBoard.IPlugin<T> {
     }
 
     @Override
-    public void addSubscriber(T plugin) {
+    public void addSubscriber(P plugin) {
+
+    }
+
+    @Override
+    public void onLifePause() {
+
+    }
+
+    @Override
+    public void onLifeResume() {
 
     }
 }

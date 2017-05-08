@@ -1,4 +1,4 @@
-package me.erwa.source.erlanggod.player.widget.plugin;
+package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.view.View;
 
@@ -11,7 +11,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class LoadingPanel extends BasePlugin {
+public class LoadingPanel extends BaseVideoPlayerPlugin {
 
     public static LoadingPanel newInstance() {
         return new LoadingPanel();

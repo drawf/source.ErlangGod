@@ -1,4 +1,4 @@
-package me.erwa.source.erlanggod.player.widget.plugin;
+package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +15,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class ProgressBar extends BasePlugin<ProgressBar.IProgressBar> implements SeekBar.OnSeekBarChangeListener {
+public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar> implements SeekBar.OnSeekBarChangeListener {
 
     public static ProgressBar newInstance() {
         return new ProgressBar();

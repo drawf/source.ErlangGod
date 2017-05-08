@@ -1,4 +1,4 @@
-package me.erwa.source.erlanggod.player.widget.plugin;
+package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.view.View;
 
@@ -12,7 +12,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class PlayButton extends BasePlugin implements View.OnClickListener {
+public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
     public static PlayButton newInstance() {
         return new PlayButton();
@@ -29,6 +29,18 @@ public class PlayButton extends BasePlugin implements View.OnClickListener {
         mBinding.includeBottomBar.ibPlay.setOnClickListener(this);
     }
 
+    @Override
+    public void onLifePause() {
+        super.onLifePause();
+        pause();
+    }
+
+    @Override
+    public void onLifeResume() {
+        super.onLifeResume();
+//        start();
+    }
+
     private void updateUI() {
         mBinding.includeBottomBar.ibPlay.setImageResource(mIsPlaying ?
                 R.drawable.ic_pause_white : R.drawable.ic_play_arrow_gray);
@@ -39,12 +51,25 @@ public class PlayButton extends BasePlugin implements View.OnClickListener {
         int id = view.getId();
         if (id == mBinding.includeBottomBar.ibPlay.getId()) {
             if (mPlayer.isPlaying()) {
-                mIsPlaying = false;
-                mPlayer.pause();
+                pause();
             } else {
-                mIsPlaying = true;
-                mPlayer.start();
+                start();
             }
+        }
+    }
+
+    private void pause() {
+        if (mPlayer != null) {
+            mIsPlaying = false;
+            mPlayer.pause();
+            updateUI();
+        }
+    }
+
+    private void start() {
+        if (mPlayer != null) {
+            mIsPlaying = true;
+            mPlayer.start();
             updateUI();
         }
     }

@@ -42,6 +42,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
         super.init(board);
         mGestureDetector = new GestureDetector(mContext, new MyGestureListener());
         mBoard.show();//must call show
+        mBinding.includeStatePanel.container.setVisibility(View.GONE);
     }
 
     @Override
@@ -64,11 +65,12 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
             //playing state control
             triggerPluginTogglePlayPause();
 
+            mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
             viewFadeInAnim(mBinding.includeStatePanel.container);
-            if (mBoard.mIsPlaying) {
-                mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-                mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
 
+            if (mBoard.mIsPlaying) {
+                mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
                 mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_play);
             } else {
                 mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
@@ -88,12 +90,11 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
             mFadeInAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-
+                    view.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    view.setVisibility(View.VISIBLE);
                 }
 
                 @Override

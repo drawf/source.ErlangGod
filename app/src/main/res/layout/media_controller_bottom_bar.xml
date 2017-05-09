@@ -17,7 +17,7 @@
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:background="@color/transparent"
-            android:src="@drawable/ic_play_arrow_gray"/>
+            android:src="@drawable/ic_media_controller_state_pause_small"/>
 
         <SeekBar
             android:id="@+id/sb_progress"
@@ -30,7 +30,7 @@
             android:minHeight="4dp"
             android:padding="20dp"
             android:progress="0"
-            android:progressDrawable="@drawable/media_controller_progress"
+            android:progressDrawable="@drawable/media_controller_progress_bar"
             android:secondaryProgress="500"
             android:thumb="@drawable/ic_media_controller_progress_thumb_normal"
             android:thumbOffset="0dp"/>

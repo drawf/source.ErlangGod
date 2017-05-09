@@ -1,7 +1,6 @@
 package me.erwa.source.erlanggod.player;
 
 import android.databinding.DataBindingUtil;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.StatePanel;
 
 /**
  * Created by drawf on 2017/3/22.
@@ -36,14 +36,6 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //Auto hide and show navigation bar and status bar for API >= 19. Keep screen on.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            View decorView = getActivity().getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
@@ -56,7 +48,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     }
 
     private void init() {
-        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(false).build());
+        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
         mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
@@ -64,13 +56,15 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
         mediaControllerBoard.addPlugin(ProgressBar.newInstance());
         mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
-        mediaControllerBoard.addPlugin(PlayButton.newInstance());
         mediaControllerBoard.addPlugin(Download.newInstance());
         mediaControllerBoard.addPlugin(OperationBar.newInstance());
         mediaControllerBoard.addPlugin(BackButton.newInstance());
+        mediaControllerBoard.addPlugin(StatePanel.newInstance());
+        mediaControllerBoard.addPlugin(PlayButton.newInstance(), StatePanel.class);
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
+
     }
 
     @Override

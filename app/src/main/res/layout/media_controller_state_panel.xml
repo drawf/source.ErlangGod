@@ -1,0 +1,31 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 播放器顶部操作栏 -->
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/media_controller_state_panel_bg">
+
+        <ImageView
+            android:id="@+id/iv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_media_controller_state_pause"/>
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_state"
+            android:layout_centerHorizontal="true"
+            android:text="00:00"
+            android:textColor="#99ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+</layout>

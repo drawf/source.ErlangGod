@@ -3,6 +3,7 @@ package me.erwa.source.erlanggod.player.widget.plugin;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
+import android.view.MotionEvent;
 
 import com.pili.pldroid.player.IMediaController;
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -130,5 +131,10 @@ public class BasePlugin<B extends ViewDataBinding, P> implements MediaController
     @Override
     public void onLifeResume() {
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return false;
     }
 }

@@ -12,14 +12,11 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
+public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener, StatePanel.IStatePanel {
 
     public static PlayButton newInstance() {
         return new PlayButton();
     }
-
-
-    private boolean mIsPlaying;
 
     @Override
     public void init(MediaControllerBoard board) {
@@ -42,8 +39,8 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
     }
 
     private void updateUI() {
-        mBinding.includeBottomBar.ibPlay.setImageResource(mIsPlaying ?
-                R.drawable.ic_pause_white : R.drawable.ic_play_arrow_gray);
+        mBinding.includeBottomBar.ibPlay.setImageResource(mBoard.mIsPlaying ?
+                R.drawable.ic_media_controller_state_play_small : R.drawable.ic_media_controller_state_pause_small);
     }
 
     @Override
@@ -60,7 +57,7 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
 
     private void pause() {
         if (mPlayer != null) {
-            mIsPlaying = false;
+            mBoard.mIsPlaying = false;
             mPlayer.pause();
             updateUI();
         }
@@ -68,7 +65,7 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
 
     private void start() {
         if (mPlayer != null) {
-            mIsPlaying = true;
+            mBoard.mIsPlaying = true;
             mPlayer.start();
             updateUI();
         }
@@ -85,10 +82,24 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
         super.onInfoListener(plMediaPlayer, what, extra);
         switch (what) {
             case PLMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                mIsPlaying = true;
+                mBoard.mIsPlaying = true;
                 updateUI();
                 break;
         }
     }
+
+    @Override
+    public void togglePlayPause() {
+        if (mPlayer.isPlaying()) {
+            pause();
+        } else {
+            start();
+        }
+    }
+
+    public interface IPlayButton {
+        void togglePlayPause();
+    }
+
 
 }

@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -53,6 +54,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     public AudioManager mAM;
     public MediaPlayerControl mPlayer;
     public ViewDataBinding mBinding;
+    public boolean mIsPlaying;
 
     private ViewGroup mAnchor;
     private int mLayoutId;
@@ -118,12 +120,25 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         triggerPluginHide();
     }
 
+    public void toggleShowHide() {
+        if (mOperationShowing) {
+            hide();
+        } else {
+            show();
+        }
+    }
+
     public void onPause() {
         triggerPluginLifePause();
     }
 
     public void onResume() {
         triggerPluginLifeResume();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return triggerPluginTouchEvent(event) || super.onTouchEvent(event);
     }
 
     @Override
@@ -157,6 +172,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
             initPlugins();
             initListener();
+
         } else {
             throw new RuntimeException("I don't support init from XML!");
         }
@@ -168,6 +184,11 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         videoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
+                switch (what) {
+                    case PLMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                        mIsPlaying = true;
+                        break;
+                }
                 triggerPluginOnInfoListener(plMediaPlayer, what, extra);
                 return false;
             }
@@ -225,6 +246,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         void onLifePause();
 
         void onLifeResume();
+
+        boolean onTouchEvent(MotionEvent event);
     }
 
     /**
@@ -316,6 +339,16 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
                 p.onLifeResume();
             }
         }
+    }
+
+    private boolean triggerPluginTouchEvent(MotionEvent event) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                boolean b = p.onTouchEvent(event);
+                if (b) return b;
+            }
+        }
+        return false;
     }
 
 }

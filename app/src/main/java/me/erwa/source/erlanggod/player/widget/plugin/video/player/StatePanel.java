@@ -13,13 +13,14 @@ import java.util.List;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
+import me.erwa.source.erlanggod.utils.LogUtils;
 
 /**
  * Created by drawf on 2017/5/9.
  * ------------------------------
  */
 
-public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
+public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements PlayButton.IPlayButton {
 
     public static StatePanel newInstance() {
         return new StatePanel();
@@ -51,6 +52,25 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
         return true;//should be true
     }
 
+    @Override
+    public void play() {
+        mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
+        viewFadeInAnim(mBinding.includeStatePanel.container);
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+
+        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_play);
+    }
+
+    @Override
+    public void pause() {
+        mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
+        viewFadeInAnim(mBinding.includeStatePanel.container);
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+
+        mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
+    }
+
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
         //must override PLVideoView toggleShowHide
@@ -64,18 +84,6 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
         public boolean onDoubleTap(MotionEvent e) {
             //playing state control
             triggerPluginTogglePlayPause();
-
-            mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
-            viewFadeInAnim(mBinding.includeStatePanel.container);
-            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-
-            if (mBoard.mIsPlaying) {
-                mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
-                mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_play);
-            } else {
-                mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
-            }
-
             return true;
         }
     }
@@ -134,9 +142,6 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
         }
     }
 
-    public interface IStatePanel {
-        void togglePlayPause();
-    }
 
     @Override
     public void addSubscriber(IStatePanel plugin) {
@@ -149,6 +154,13 @@ public class StatePanel extends BaseVideoPlayerPlugin<StatePanel.IStatePanel> {
             for (IStatePanel p : mSubscribers) {
                 p.togglePlayPause();
             }
+        } else {
+            LogUtils.w("togglePlayPause has no subscriber!");
         }
     }
+}
+
+//双向订阅时不能定义内部接口
+interface IStatePanel {
+    void togglePlayPause();
 }

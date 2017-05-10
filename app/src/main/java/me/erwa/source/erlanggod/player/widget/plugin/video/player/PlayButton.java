@@ -4,6 +4,9 @@ import android.view.View;
 
 import com.pili.pldroid.player.PLMediaPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
@@ -12,11 +15,13 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener, StatePanel.IStatePanel {
+public class PlayButton extends BaseVideoPlayerPlugin<PlayButton.IPlayButton> implements View.OnClickListener, IStatePanel {
 
     public static PlayButton newInstance() {
         return new PlayButton();
     }
+
+    private List<IPlayButton> mSubscribers = new ArrayList<>();
 
     @Override
     public void init(MediaControllerBoard board) {
@@ -60,6 +65,8 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
             mBoard.mIsPlaying = false;
             mPlayer.pause();
             updateUI();
+
+            triggerPluginPause();
         }
     }
 
@@ -68,6 +75,8 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
             mBoard.mIsPlaying = true;
             mPlayer.start();
             updateUI();
+
+            triggerPluginPlay();
         }
     }
 
@@ -90,15 +99,39 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
 
     @Override
     public void togglePlayPause() {
-        if (mPlayer.isPlaying()) {
+        if (mBoard.mIsPlaying) {
             pause();
         } else {
             start();
         }
     }
 
+    @Override
+    public void addSubscriber(IPlayButton plugin) {
+        super.addSubscriber(plugin);
+        mSubscribers.add(plugin);
+    }
+
     public interface IPlayButton {
-        void togglePlayPause();
+        void play();
+
+        void pause();
+    }
+
+    private void triggerPluginPlay() {
+        if (!mSubscribers.isEmpty()) {
+            for (IPlayButton p : mSubscribers) {
+                p.play();
+            }
+        }
+    }
+
+    private void triggerPluginPause() {
+        if (!mSubscribers.isEmpty()) {
+            for (IPlayButton p : mSubscribers) {
+                p.pause();
+            }
+        }
     }
 
 

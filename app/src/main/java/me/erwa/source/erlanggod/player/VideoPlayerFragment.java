@@ -60,7 +60,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(OperationBar.newInstance());
         mediaControllerBoard.addPlugin(BackButton.newInstance());
         mediaControllerBoard.addPlugin(StatePanel.newInstance());
-        mediaControllerBoard.addPlugin(PlayButton.newInstance(), StatePanel.class);
+        mediaControllerBoard.addPlugin(true, PlayButton.newInstance(), StatePanel.class);
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

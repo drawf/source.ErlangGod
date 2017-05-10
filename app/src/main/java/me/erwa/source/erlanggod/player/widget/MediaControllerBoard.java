@@ -250,18 +250,27 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         boolean onTouchEvent(MotionEvent event);
     }
 
+
+    public void addPlugin(IPlugin plugin, Class... clazz) {
+        addPlugin(false, plugin, clazz);
+    }
+
     /**
      * 用于MediaControllerBoard添加插件
      *
-     * @param plugin 插件
-     * @param clazz  要订阅的插件
+     * @param bilateral 双向订阅
+     * @param plugin    插件
+     * @param clazz     要订阅的插件
      */
-    public void addPlugin(IPlugin plugin, Class... clazz) {
+    public void addPlugin(boolean bilateral, IPlugin plugin, Class... clazz) {
         if (clazz != null && !mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 for (Class c : Arrays.asList(clazz)) {
                     if (p.getClass().equals(c)) {
                         p.addSubscriber(plugin);
+                        if (bilateral) {
+                            plugin.addSubscriber(p);
+                        }
                     }
                 }
             }

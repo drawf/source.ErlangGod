@@ -220,6 +220,13 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
                 triggerPluginOnPreparedListener(plMediaPlayer);
             }
         });
+
+        videoView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
+                triggerPluginOnSeekCompleteListener(plMediaPlayer);
+            }
+        });
     }
 
     private void initPlugins() {
@@ -240,6 +247,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         void onCompletionListener(PLMediaPlayer plMediaPlayer);
 
         void onPreparedListener(PLMediaPlayer plMediaPlayer);
+
+        void onSeekComplete(PLMediaPlayer plMediaPlayer);
 
         void addSubscriber(P plugin);
 
@@ -330,6 +339,14 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.onPreparedListener(plMediaPlayer);
+            }
+        }
+    }
+
+    private void triggerPluginOnSeekCompleteListener(PLMediaPlayer plMediaPlayer) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onSeekComplete(plMediaPlayer);
             }
         }
     }

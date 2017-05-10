@@ -119,6 +119,11 @@ public class BasePlugin<B extends ViewDataBinding, P> implements MediaController
     }
 
     @Override
+    public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
+
+    }
+
+    @Override
     public void addSubscriber(P plugin) {
 
     }

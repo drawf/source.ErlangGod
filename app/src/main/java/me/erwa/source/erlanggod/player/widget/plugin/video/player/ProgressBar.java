@@ -31,7 +31,7 @@ public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar>
             switch (msg.what) {
                 case FLAG_UPDATE_PROGRESS:
                     updateProgress();
-                    if (!mDragging && mPlayer.isPlaying()) {
+                    if (!mDragging) {
                         sendMessageDelayed(obtainMessage(FLAG_UPDATE_PROGRESS), 1000);
                         triggerPluginOnUpdateProgress();
                     }
@@ -48,7 +48,7 @@ public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar>
 
     @Override
     public void onShow() {
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS), 1000);
+        mHandler.sendMessage(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS));
     }
 
     @Override

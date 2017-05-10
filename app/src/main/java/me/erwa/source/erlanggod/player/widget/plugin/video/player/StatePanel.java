@@ -1,10 +1,15 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
+import android.app.Activity;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -99,46 +104,104 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            float mOldX = e1.getX(), mOldY = e1.getY();
-            float deltaY = mOldY - e2.getY();
-            float deltaX = mOldX - e2.getX();
-            boolean toSeek = Math.abs(distanceX) >= Math.abs(distanceY);
+            boolean toSeek = Math.abs(distanceX) - Math.abs(distanceY) >= ViewConfiguration.get(mContext).getScaledTouchSlop();
+            boolean toVolume = e1.getX() >= mContext.getResources().getDisplayMetrics().widthPixels * 0.5f;
+
+
+//            LogUtils.trace("%s,%s", distanceX, distanceY);
 
             if (toSeek) {
-                onProgressSlide(-deltaX / mBoard.getWidth());
+                onProgressSlide(-distanceX);
+            } else {
+                float percent = distanceY / mBoard.getHeight();
+                if (toVolume) {
+                    onVolumeSlide(percent);
+                } else {
+                    onBrightnessSlide(percent);
+                }
             }
-
-
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
     }
 
-    private void onProgressSlide(float percent) {
-        long currentPosition = mPlayer.getCurrentPosition();
-        long duration = mPlayer.getDuration();
-        long deltaMax = duration / 3;
-        long delta = (long) (deltaMax * percent);
+    private float tempDelta;
 
-        newPosition = delta + currentPosition;
+    private void onProgressSlide(float distance) {
+        tempDelta += distance;
+        if (Math.abs(tempDelta) < 25) return;
+
+        float percent = tempDelta / (mBoard.getWidth() / 5);
+        long duration = mPlayer.getDuration();
+        long currentPosition = mPlayer.getCurrentPosition();
+        newPosition = (long) (duration * percent + currentPosition);
 
         if (newPosition <= 0) {
             newPosition = 0;
-            delta = -currentPosition;
+            tempDelta = -currentPosition;
         } else {
             newPosition = (duration - newPosition) < 9000 ? duration - 9000 : newPosition;
         }
-        int showDelta = (int) (delta / 1000);
-        if (showDelta != 0) {
-            mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
-            viewFadeInAnim(mBinding.includeStatePanel.container);
-            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+        mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
+        viewFadeInAnim(mBinding.includeStatePanel.container);
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
 
-            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
-            mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
-            mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
-                    ? R.drawable.ic_media_controller_state_fast_forward
-                    : R.drawable.ic_media_controller_state_rewind);
+        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
+        mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
+                ? R.drawable.ic_media_controller_state_fast_forward
+                : R.drawable.ic_media_controller_state_rewind);
+
+        LogUtils.trace("%s,%s,%s,%s", tempDelta, percent, newPosition, mBoard.getWidth());
+
+        tempDelta = 0;
+    }
+
+    private float tempVolume;
+
+    private void onVolumeSlide(float percent) {
+        int maxVolume = mBoard.mAM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mBinding.includeStatePanel.pbVolume.setMax(maxVolume * 10);
+
+        tempVolume += maxVolume * percent;
+        if (Math.abs(tempVolume) < 1) return;
+
+        int newVolume = Math.round(tempVolume) + currentVolume;
+        if (newVolume <= 0) {
+            newVolume = 0;
+        } else {
+            newVolume = newVolume > maxVolume ? maxVolume : newVolume;
         }
+        mBoard.mAM.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+        mBinding.includeStatePanel.pbVolume.setProgress(newVolume * 10);
+
+        tempVolume = 0;
+        LogUtils.trace("%s,%s,%s,%s", percent, newVolume, maxVolume, currentVolume);
+    }
+
+    private float tempBrightness;
+    private static final float LIGHT_THRESHOLD = 0f;
+
+    private void onBrightnessSlide(float percent) {
+        tempBrightness += WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL * percent;
+        if (Math.abs(tempBrightness) < 0.01) return;
+
+        if (mContext instanceof Activity) {
+            Window window = ((Activity) mContext).getWindow();
+
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.screenBrightness = tempBrightness + layoutParams.screenBrightness;
+            if (layoutParams.screenBrightness > WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL) {
+                layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+            } else if (layoutParams.screenBrightness < WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF + LIGHT_THRESHOLD) {
+                layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF + LIGHT_THRESHOLD;
+            }
+            window.setAttributes(layoutParams);
+
+            mBinding.includeStatePanel.pbBrightness.setMax(100);
+            mBinding.includeStatePanel.pbBrightness.setProgress(Math.round(layoutParams.screenBrightness * 100));
+        }
+        tempBrightness = 0;
     }
 
     private void endGesture() {

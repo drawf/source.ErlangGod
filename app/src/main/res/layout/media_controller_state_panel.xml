@@ -2,30 +2,101 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 播放器顶部操作栏 -->
     <RelativeLayout
-        android:id="@+id/container"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:background="@drawable/media_controller_state_panel_bg">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_state"
+        <!--声音控件-->
+        <LinearLayout
+            android:id="@+id/container_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/media_controller_state_panel_volume_brightness_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
+
+            <me.erwa.source.erlanggod.player.widget.VerticalProgressBar
+                android:id="@+id/pb_volume"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:max="100"
+                android:maxWidth="4dp"
+                android:minWidth="4dp"
+                android:progressDrawable="@drawable/media_controller_state_panel_progress"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_media_controller_state_volume"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_media_controller_state_pause"/>
+            android:background="@drawable/media_controller_state_panel_bg">
 
-        <TextView
-            android:id="@+id/tv_duration"
+            <ImageView
+                android:id="@+id/iv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_media_controller_state_pause"/>
+
+            <TextView
+                android:id="@+id/tv_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_state"
+                android:layout_centerHorizontal="true"
+                android:text="00:00"
+                android:textColor="#99ffffff"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/container_brightness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_state"
-            android:layout_centerHorizontal="true"
-            android:text="00:00"
-            android:textColor="#99ffffff"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/media_controller_state_panel_volume_brightness_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
 
+            <me.erwa.source.erlanggod.player.widget.VerticalProgressBar
+                android:id="@+id/pb_brightness"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:max="15"
+                android:maxWidth="4dp"
+                android:minWidth="4dp"
+                android:progressDrawable="@drawable/media_controller_state_panel_progress"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_media_controller_state_brightness"/>
+
+        </LinearLayout>
     </RelativeLayout>
 </layout>

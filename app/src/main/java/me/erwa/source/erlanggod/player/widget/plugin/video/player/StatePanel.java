@@ -35,6 +35,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     }
 
     private GestureDetector mGestureDetector;
+    private MyGestureListener mMyGestureListener;
     private List<IStatePanel> mSubscribers = new ArrayList<>();
     private long newPosition = -1;
 
@@ -50,9 +51,12 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);
-        mGestureDetector = new GestureDetector(mContext, new MyGestureListener());
+        mMyGestureListener = new MyGestureListener();
+        mGestureDetector = new GestureDetector(mContext, mMyGestureListener);
         mBoard.show();//must call show
         mBinding.includeStatePanel.container.setVisibility(View.GONE);
+
+        currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -88,6 +92,13 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
+        private int slop;
+        public boolean toSeek, toVorB;
+
+        public MyGestureListener() {
+            this.slop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+        }
+
         //must override PLVideoView toggleShowHide
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -104,16 +115,19 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            boolean toSeek = Math.abs(distanceX) - Math.abs(distanceY) >= ViewConfiguration.get(mContext).getScaledTouchSlop();
-            boolean toVolume = e1.getX() >= mContext.getResources().getDisplayMetrics().widthPixels * 0.5f;
-
-
-//            LogUtils.trace("%s,%s", distanceX, distanceY);
+            float d = Math.abs(distanceX) - Math.abs(distanceY);
+            if (Math.abs(d) > slop) {
+                toSeek = d >= 0;
+                toVorB = d < 0;
+            }
+            LogUtils.trace("%s,%s,%s,%s,%s", mBoard.getHeight(), distanceY, toSeek, slop, "iii");
 
             if (toSeek) {
                 onProgressSlide(-distanceX);
-            } else {
-                float percent = distanceY / mBoard.getHeight();
+            } else if (toVorB && Math.abs(distanceY) >= 1) {
+
+                boolean toVolume = e1.getX() >= mBoard.getWidth() * 0.5f;
+                float percent = distanceY / (mBoard.getHeight() / 2);
                 if (toVolume) {
                     onVolumeSlide(percent);
                 } else {
@@ -125,58 +139,80 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     }
 
     private float tempDelta;
+    private int tempProgress;
 
     private void onProgressSlide(float distance) {
         tempDelta += distance;
-        if (Math.abs(tempDelta) < 25) return;
 
-        float percent = tempDelta / (mBoard.getWidth() / 5);
         long duration = mPlayer.getDuration();
         long currentPosition = mPlayer.getCurrentPosition();
-        newPosition = (long) (duration * percent + currentPosition);
 
-        if (newPosition <= 0) {
-            newPosition = 0;
-            tempDelta = -currentPosition;
-        } else {
-            newPosition = (duration - newPosition) < 9000 ? duration - 9000 : newPosition;
+        tempProgress += tempDelta * 1000 / duration;
+
+        LogUtils.trace("%s,%s,%s", tempDelta, tempProgress, "ppp");
+
+        if (tempProgress >= 1) {
+
+            int currentProgress = (int) (currentPosition / duration);
+
+            newPosition = calculateNewPosition(duration, tempProgress + currentProgress);
+
+//        if (tempDelta*1000<duration/1000) return;
+
+
+//        newPosition = duration / 1000 + currentPosition;
+////        newPosition = (long) (duration * percent + currentPosition);
+//
+//        if (newPosition <= 0) {
+//            newPosition = 0;
+//        } else {
+//            newPosition = (duration - newPosition) < 9000 ? duration - 9000 : newPosition;
+//        }
+            mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
+            viewFadeInAnim(mBinding.includeStatePanel.container);
+            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+
+            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+            mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
+            mBinding.includeStatePanel.ivState.setImageResource(tempDelta >= 0
+                    ? R.drawable.ic_media_controller_state_fast_forward
+                    : R.drawable.ic_media_controller_state_rewind);
+
         }
-        mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
-        viewFadeInAnim(mBinding.includeStatePanel.container);
-        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-
-        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
-        mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
-        mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
-                ? R.drawable.ic_media_controller_state_fast_forward
-                : R.drawable.ic_media_controller_state_rewind);
-
-        LogUtils.trace("%s,%s,%s,%s", tempDelta, percent, newPosition, mBoard.getWidth());
-
         tempDelta = 0;
+        tempProgress = 0;
+    }
+
+    private long calculateNewPosition(long duration, int progress) {
+        long position = duration * progress / 1000L;
+        return (duration - position) < 9000 ? duration - 9000 : position;
     }
 
     private float tempVolume;
+    private float currentVolume;
+
 
     private void onVolumeSlide(float percent) {
         int maxVolume = mBoard.mAM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mBinding.includeStatePanel.pbVolume.setMax(maxVolume * 10);
-
         tempVolume += maxVolume * percent;
-        if (Math.abs(tempVolume) < 1) return;
 
-        int newVolume = Math.round(tempVolume) + currentVolume;
+//        LogUtils.trace("%s,%s,%s,%s", tempVolume, percent, "vvv", tempVolume + currentVolume);
+
+        if (Math.abs(tempVolume) < 0.01) return;
+
+        float newVolume = tempVolume + currentVolume;
         if (newVolume <= 0) {
             newVolume = 0;
         } else {
             newVolume = newVolume > maxVolume ? maxVolume : newVolume;
         }
-        mBoard.mAM.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
-        mBinding.includeStatePanel.pbVolume.setProgress(newVolume * 10);
+        currentVolume = newVolume;
+        mBoard.mAM.setStreamVolume(AudioManager.STREAM_MUSIC, (int) newVolume, 0);
 
+        mBinding.includeStatePanel.pbVolume.setMax(maxVolume * 100);
+        mBinding.includeStatePanel.pbVolume.setProgress((int) (newVolume * 100));
         tempVolume = 0;
-        LogUtils.trace("%s,%s,%s,%s", percent, newVolume, maxVolume, currentVolume);
+//        LogUtils.trace("%s,%s,%s,%s", currentVolume, (int) newVolume, (int) (newVolume * 100), "mmm");
     }
 
     private float tempBrightness;
@@ -184,6 +220,9 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
     private void onBrightnessSlide(float percent) {
         tempBrightness += WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL * percent;
+
+//        LogUtils.trace("%s,%s,%s", tempBrightness, percent, "ppp");
+
         if (Math.abs(tempBrightness) < 0.01) return;
 
         if (mContext instanceof Activity) {
@@ -199,7 +238,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
             window.setAttributes(layoutParams);
 
             mBinding.includeStatePanel.pbBrightness.setMax(100);
-            mBinding.includeStatePanel.pbBrightness.setProgress(Math.round(layoutParams.screenBrightness * 100));
+            mBinding.includeStatePanel.pbBrightness.setProgress((int) (layoutParams.screenBrightness * 100));
         }
         tempBrightness = 0;
     }
@@ -208,6 +247,9 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         if (newPosition >= 0) {
             mPlayer.seekTo(newPosition);
         }
+
+        mMyGestureListener.toSeek = false;
+        mMyGestureListener.toVorB = false;
     }
 
     @Override

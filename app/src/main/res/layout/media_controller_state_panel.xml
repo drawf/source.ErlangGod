@@ -85,7 +85,7 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
-                android:max="15"
+                android:max="100"
                 android:maxWidth="4dp"
                 android:minWidth="4dp"
                 android:progressDrawable="@drawable/media_controller_state_panel_progress"/>

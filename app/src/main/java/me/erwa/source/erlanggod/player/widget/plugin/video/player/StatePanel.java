@@ -40,12 +40,21 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
     private static int sTimeout = 1500;
     private static final int FLAG_STATE_PANEL_HIDE = 0;
+    private static final int FLAG_VOLUME_BRIGHTNESS_HIDE = 1;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            viewFadeOutAnim(mBinding.includeStatePanel.container);
-            viewFadeOutAnim(mBinding.includeStatePanel.containerBrightness);
-            viewFadeOutAnim(mBinding.includeStatePanel.containerVolume);
+
+            switch (msg.what) {
+                case FLAG_STATE_PANEL_HIDE:
+                    viewFadeOutAnim(mBinding.includeStatePanel.container);
+                    break;
+                case FLAG_VOLUME_BRIGHTNESS_HIDE:
+                    viewFadeOutAnim(mBinding.includeStatePanel.containerBrightness);
+                    viewFadeOutAnim(mBinding.includeStatePanel.containerVolume);
+                    break;
+            }
+
         }
     };
 
@@ -196,8 +205,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         }
 
         viewFadeInAnim(mBinding.includeStatePanel.containerVolume);
-        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        mHandler.removeMessages(FLAG_VOLUME_BRIGHTNESS_HIDE);
+        mHandler.sendEmptyMessageDelayed(FLAG_VOLUME_BRIGHTNESS_HIDE, sTimeout);
 
         currentVolume = newVolume;
         mBoard.mAM.setStreamVolume(AudioManager.STREAM_MUSIC, (int) newVolume, 0);
@@ -220,8 +229,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
         if (mContext instanceof Activity) {
             viewFadeInAnim(mBinding.includeStatePanel.containerBrightness);
-            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+            mHandler.removeMessages(FLAG_VOLUME_BRIGHTNESS_HIDE);
+            mHandler.sendEmptyMessageDelayed(FLAG_VOLUME_BRIGHTNESS_HIDE, sTimeout);
 
             Window window = ((Activity) mContext).getWindow();
             WindowManager.LayoutParams layoutParams = window.getAttributes();

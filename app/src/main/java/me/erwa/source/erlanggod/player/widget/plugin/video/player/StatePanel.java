@@ -37,7 +37,6 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     private GestureDetector mGestureDetector;
     private MyGestureListener mMyGestureListener;
     private List<IStatePanel> mSubscribers = new ArrayList<>();
-    private long newPosition = -1;
 
     private static int sTimeout = 1500;
     private static final int FLAG_STATE_PANEL_HIDE = 0;
@@ -119,11 +118,13 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
             if (Math.abs(d) > slop) {
                 toSeek = d >= 0;
                 toVorB = d < 0;
+
+                if (toSeek && currentPosition == -1) currentPosition = mPlayer.getCurrentPosition();
             }
             LogUtils.trace("%s,%s,%s,%s,%s", mBoard.getHeight(), distanceY, toSeek, slop, "iii");
 
             if (toSeek) {
-                onProgressSlide(-distanceX);
+                onProgressSlide(-distanceX / mBoard.getWidth());
             } else if (toVorB && Math.abs(distanceY) >= 1) {
 
                 boolean toVolume = e1.getX() >= mBoard.getWidth() * 0.5f;
@@ -138,54 +139,37 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         }
     }
 
-    private float tempDelta;
     private int tempProgress;
+    private long currentPosition = -1;
+    private long newPosition = -1;
+    private boolean isSeekEnd;
 
-    private void onProgressSlide(float distance) {
-        tempDelta += distance;
-
+    private void onProgressSlide(float percent) {
         long duration = mPlayer.getDuration();
-        long currentPosition = mPlayer.getCurrentPosition();
+        tempProgress += percent * duration / 2;
+//        LogUtils.trace("%s,%s,%s,%s", percent, tempProgress, "ppp", currentPosition);
+        if (Math.abs(tempProgress) < 100) return;
 
-        tempProgress += tempDelta * 1000 / duration;
-
-        LogUtils.trace("%s,%s,%s", tempDelta, tempProgress, "ppp");
-
-        if (tempProgress >= 1) {
-
-            int currentProgress = (int) (currentPosition / duration);
-
-            newPosition = calculateNewPosition(duration, tempProgress + currentProgress);
-
-//        if (tempDelta*1000<duration/1000) return;
-
-
-//        newPosition = duration / 1000 + currentPosition;
-////        newPosition = (long) (duration * percent + currentPosition);
-//
-//        if (newPosition <= 0) {
-//            newPosition = 0;
-//        } else {
-//            newPosition = (duration - newPosition) < 9000 ? duration - 9000 : newPosition;
-//        }
-            mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
-            viewFadeInAnim(mBinding.includeStatePanel.container);
-            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-
-            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
-            mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
-            mBinding.includeStatePanel.ivState.setImageResource(tempDelta >= 0
-                    ? R.drawable.ic_media_controller_state_fast_forward
-                    : R.drawable.ic_media_controller_state_rewind);
-
+        isSeekEnd = false;
+        newPosition = tempProgress + currentPosition;
+        if (newPosition < 0 && !isSeekEnd) {
+            newPosition = 0;
+        } else {
+            newPosition = (duration - newPosition) < 9000 ? duration - 9000 : newPosition;
         }
-        tempDelta = 0;
-        tempProgress = 0;
-    }
 
-    private long calculateNewPosition(long duration, int progress) {
-        long position = duration * progress / 1000L;
-        return (duration - position) < 9000 ? duration - 9000 : position;
+        currentPosition = newPosition;
+        mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
+        viewFadeInAnim(mBinding.includeStatePanel.container);
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+
+        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
+        mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
+                ? R.drawable.ic_media_controller_state_fast_forward
+                : R.drawable.ic_media_controller_state_rewind);
+
+        tempProgress = 0;
     }
 
     private float tempVolume;
@@ -237,8 +221,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
             }
             window.setAttributes(layoutParams);
 
-            mBinding.includeStatePanel.pbBrightness.setMax(100);
-            mBinding.includeStatePanel.pbBrightness.setProgress((int) (layoutParams.screenBrightness * 100));
+            mBinding.includeStatePanel.pbBrightness.setMax(1000);
+            mBinding.includeStatePanel.pbBrightness.setProgress((int) (layoutParams.screenBrightness * 1000));
         }
         tempBrightness = 0;
     }
@@ -255,7 +239,9 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     @Override
     public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
         super.onSeekComplete(plMediaPlayer);
+        isSeekEnd = true;
         newPosition = -1;
+        currentPosition = -1;
     }
 
     private String generateTime(long position) {

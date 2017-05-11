@@ -44,6 +44,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         @Override
         public void handleMessage(Message msg) {
             viewFadeOutAnim(mBinding.includeStatePanel.container);
+            viewFadeOutAnim(mBinding.includeStatePanel.containerBrightness);
+            viewFadeOutAnim(mBinding.includeStatePanel.containerVolume);
         }
     };
 
@@ -54,6 +56,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         mGestureDetector = new GestureDetector(mContext, mMyGestureListener);
         mBoard.show();//must call show
         mBinding.includeStatePanel.container.setVisibility(View.GONE);
+        mBinding.includeStatePanel.containerBrightness.setVisibility(View.GONE);
+        mBinding.includeStatePanel.containerVolume.setVisibility(View.GONE);
 
         currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
@@ -162,8 +166,8 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-
         mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+
         mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
         mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
                 ? R.drawable.ic_media_controller_state_fast_forward
@@ -190,6 +194,11 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         } else {
             newVolume = newVolume > maxVolume ? maxVolume : newVolume;
         }
+
+        viewFadeInAnim(mBinding.includeStatePanel.containerVolume);
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+
         currentVolume = newVolume;
         mBoard.mAM.setStreamVolume(AudioManager.STREAM_MUSIC, (int) newVolume, 0);
 
@@ -210,10 +219,14 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         if (Math.abs(tempBrightness) < 0.01) return;
 
         if (mContext instanceof Activity) {
-            Window window = ((Activity) mContext).getWindow();
+            viewFadeInAnim(mBinding.includeStatePanel.containerBrightness);
+            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
 
+            Window window = ((Activity) mContext).getWindow();
             WindowManager.LayoutParams layoutParams = window.getAttributes();
             layoutParams.screenBrightness = tempBrightness + layoutParams.screenBrightness;
+
             if (layoutParams.screenBrightness > WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL) {
                 layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
             } else if (layoutParams.screenBrightness < WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF + LIGHT_THRESHOLD) {
@@ -262,51 +275,22 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         if (mFadeInAnim == null) {
             mFadeInAnim = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
             mFadeInAnim.setDuration(200);
-            mFadeInAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    view.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
         }
         if (view.getVisibility() != View.VISIBLE) {
             view.startAnimation(mFadeInAnim);
         }
+        view.setVisibility(View.VISIBLE);
     }
 
     private void viewFadeOutAnim(final View view) {
         if (mFadeOutAnim == null) {
             mFadeOutAnim = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
             mFadeOutAnim.setDuration(200);
-            mFadeOutAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    view.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
         }
         if (view.getVisibility() != View.GONE) {
             view.startAnimation(mFadeOutAnim);
         }
+        view.setVisibility(View.GONE);
     }
 
 

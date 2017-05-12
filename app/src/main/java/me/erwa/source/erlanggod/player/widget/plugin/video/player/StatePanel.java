@@ -173,9 +173,11 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 
         currentPosition = newPosition;
         mBinding.includeStatePanel.tvDuration.setVisibility(View.VISIBLE);
-        viewFadeInAnim(mBinding.includeStatePanel.container);
-        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
-        mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        if (mBoard.mIsPlaying) {
+            viewFadeInAnim(mBinding.includeStatePanel.container);
+            mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+            mHandler.sendEmptyMessageDelayed(FLAG_STATE_PANEL_HIDE, sTimeout);
+        }
 
         mBinding.includeStatePanel.tvDuration.setText(generateTime(newPosition));
         mBinding.includeStatePanel.ivState.setImageResource(percent >= 0
@@ -264,6 +266,10 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         isSeekEnd = true;
         newPosition = -1;
         currentPosition = -1;
+        if (!mBoard.mIsPlaying){
+            mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
+            mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
+        }
     }
 
     private String generateTime(long position) {

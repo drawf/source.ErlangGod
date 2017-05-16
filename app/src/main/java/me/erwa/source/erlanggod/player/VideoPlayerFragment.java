@@ -72,13 +72,13 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        mediaControllerBoard.onResume();
+        mediaControllerBoard.onLifeResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mediaControllerBoard.onPause();
+        mediaControllerBoard.onLifePause();
     }
 
     @Override

@@ -32,16 +32,6 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
         this.mBinding = (B) board.mBinding;
     }
 
-    @Override
-    public void onShow() {
-
-    }
-
-    @Override
-    public void onHide() {
-
-    }
-
     @CallSuper
     @Override
     public void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra) {
@@ -138,14 +128,23 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
         return false;
     }
 
-    public static final int BASE_ACTION_PLAY_BUTTON = 100;
-    public static final int BASE_ACTION_PROGRESS_BAR = 200;
+    protected static final int BASE_ACTION_PLAY_BUTTON = 100;
+    protected static final int BASE_ACTION_PROGRESS_BAR = 200;
+    protected static final int BASE_ACTION_OPERATION_BAR = 300;
 
+    /**
+     * 发出的动作命令
+     * @param action
+     */
     @Override
     public void doAction(int action) {
         mBoard.triggerPluginOnAction(action);
     }
 
+    /**
+     * 订阅的动作命令
+     * @param action
+     */
     @Override
     public void onAction(int action) {
 

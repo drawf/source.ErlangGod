@@ -4,8 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.media.AudioManager;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.ToastUtils;
 
@@ -53,30 +52,14 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     public AudioManager mAM;
     public MediaPlayerControl mPlayer;
     public ViewDataBinding mBinding;
+    // TODO: drawf 2017/5/16 考虑将状态数据封装起来
     public boolean mIsPlaying;
+    public boolean mOperationShowing;
 
     private ViewGroup mAnchor;
     private int mLayoutId;
     private boolean mInitFromXML;//暂不支持从xml初始化
     private List<IPlugin> mPlugins = new ArrayList<>();
-
-    private boolean mOperationShowing;
-    private static int sOperationTimeout = 5000;
-    private static final int FLAG_OPERATION_HIDE = 1;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case FLAG_OPERATION_HIDE:
-                    hide();
-                    break;
-            }
-        }
-    };
-
-    public void removeOperationHide() {
-        mHandler.removeMessages(FLAG_OPERATION_HIDE);
-    }
 
     private void init(@NonNull Context context, int layoutId) {
         mContext = context;
@@ -90,48 +73,27 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         mPlayer = mediaPlayerControl;
     }
 
+    //将默认控制转移到OperationBar控制
     @Override
     public void show() {
-        show(sOperationTimeout);
+        show(0);
     }
 
     @Override
     public void show(int timeout) {
-        if (!mOperationShowing) {
-            mOperationShowing = true;
-        }
-
-        //trigger hide when timeout
-        if (timeout > 0) {
-            mHandler.removeMessages(FLAG_OPERATION_HIDE);
-            mHandler.sendMessageDelayed(mHandler.obtainMessage(FLAG_OPERATION_HIDE), timeout);
-        }
-
-        triggerPluginShow();
+        triggerPluginOnAction(OperationBar.ACTION_DO_SHOW);
     }
 
     @Override
     public void hide() {
-        if (mOperationShowing) {
-            mOperationShowing = false;
-        }
-
-        triggerPluginHide();
+        triggerPluginOnAction(OperationBar.ACTION_DO_HIDE);
     }
 
-    public void toggleShowHide() {
-        if (mOperationShowing) {
-            hide();
-        } else {
-            show();
-        }
-    }
-
-    public void onPause() {
+    public void onLifePause() {
         triggerPluginLifePause();
     }
 
-    public void onResume() {
+    public void onLifeResume() {
         triggerPluginLifeResume();
     }
 
@@ -235,10 +197,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     public interface IPlugin {
         void init(MediaControllerBoard board);
 
-        void onShow();
-
-        void onHide();
-
         void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra);
 
         void onErrorListener(PLMediaPlayer plMediaPlayer, int errorCode);
@@ -261,7 +219,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     }
 
     /**
-     * @param plugin  要添加的插件
+     * @param plugin 要添加的插件
      */
     public void addPlugin(IPlugin plugin) {
         mPlugins.add(plugin);
@@ -271,22 +229,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.init(this);
-            }
-        }
-    }
-
-    private void triggerPluginShow() {
-        if (!mPlugins.isEmpty()) {
-            for (IPlugin p : mPlugins) {
-                p.onShow();
-            }
-        }
-    }
-
-    private void triggerPluginHide() {
-        if (!mPlugins.isEmpty()) {
-            for (IPlugin p : mPlugins) {
-                p.onHide();
             }
         }
     }

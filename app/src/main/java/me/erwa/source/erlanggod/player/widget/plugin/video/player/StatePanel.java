@@ -41,7 +41,6 @@ public class StatePanel extends BaseVideoPlayerPlugin {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case FLAG_STATE_PANEL_HIDE:
                     viewFadeOutAnim(mBinding.includeStatePanel.container);
@@ -93,7 +92,7 @@ public class StatePanel extends BaseVideoPlayerPlugin {
         }
     }
 
-    public void onPlay() {
+    private void onPlay() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
@@ -102,7 +101,7 @@ public class StatePanel extends BaseVideoPlayerPlugin {
         mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_play);
     }
 
-    public void onPause() {
+    private void onPause() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
@@ -122,7 +121,7 @@ public class StatePanel extends BaseVideoPlayerPlugin {
         //must override PLVideoView toggleShowHide
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            mBoard.toggleShowHide();
+            doAction(OperationBar.ACTION_DO_TOGGLE_SHOW_HIDE);
             return true;
         }
 

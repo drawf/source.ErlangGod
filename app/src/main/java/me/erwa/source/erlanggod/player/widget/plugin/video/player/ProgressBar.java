@@ -47,14 +47,32 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
     }
 
     @Override
-    public void onShow() {
+    public void onAction(int action) {
+        super.onAction(action);
+        switch (action) {
+            case OperationBar.ACTION_ON_SHOW:
+                onShow();
+                break;
+            case OperationBar.ACTION_ON_HIDE:
+                onHide();
+                break;
+            case PlayButton.ACTION_ON_PLAY:
+                mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
+                mHandler.sendMessage(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS));
+                break;
+            case PlayButton.ACTION_ON_PAUSE:
+                mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
+                break;
+        }
+    }
+
+    private void onShow() {
         mShowing = true;
         mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
         mHandler.sendMessage(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS));
     }
 
-    @Override
-    public void onHide() {
+    private void onHide() {
         mShowing = false;
     }
 
@@ -90,7 +108,7 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
     public void onStartTrackingTouch(SeekBar seekBar) {
         mDragging = true;
         mHandler.removeMessages(FLAG_UPDATE_PROGRESS);//取消进度更新
-        mBoard.removeOperationHide();//取消操作栏自动隐藏
+        doAction(OperationBar.ACTION_DO_REMOVE_AUTO_HIDE);//取消操作栏自动隐藏
     }
 
     @Override

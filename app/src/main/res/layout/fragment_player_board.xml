@@ -20,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="play"/>
+            android:text="play"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btn_hide"
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="100dp"
-            android:text="pause"/>
+            android:text="pause"
+            android:visibility="gone"/>
     </RelativeLayout>
 </layout>

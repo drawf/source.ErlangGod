@@ -50,9 +50,11 @@ public class OperationBar extends BaseVideoPlayerPlugin {
     public void onAction(int action) {
         super.onAction(action);
         switch (action) {
+            case MediaControllerBoard.COMMAND_DO_SHOW:
             case ACTION_DO_SHOW:
                 doShow();
                 break;
+            case MediaControllerBoard.COMMAND_DO_HIDE:
             case ACTION_DO_HIDE:
                 doHide();
                 break;

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.ToastUtils;
 
@@ -32,6 +31,10 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
  */
 
 public class MediaControllerBoard extends FrameLayout implements IMediaController {
+
+    public static final int COMMAND_DO_SHOW = 110 * 1000;
+    public static final int COMMAND_DO_HIDE = 111 * 1000;
+
 
     public MediaControllerBoard(@NonNull Context context, @NonNull int layoutId) {
         super(context);
@@ -81,12 +84,12 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
     @Override
     public void show(int timeout) {
-        triggerPluginOnAction(OperationBar.ACTION_DO_SHOW);
+        triggerPluginOnAction(COMMAND_DO_SHOW);
     }
 
     @Override
     public void hide() {
-        triggerPluginOnAction(OperationBar.ACTION_DO_HIDE);
+        triggerPluginOnAction(COMMAND_DO_HIDE);
     }
 
     public void onLifePause() {
@@ -97,6 +100,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         triggerPluginLifeResume();
     }
 
+    // TODO: drawf 2017/5/16 事件优先级
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return triggerPluginTouchEvent(event) || super.onTouchEvent(event);

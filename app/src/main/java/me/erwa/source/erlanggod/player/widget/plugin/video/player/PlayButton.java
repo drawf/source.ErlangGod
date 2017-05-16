@@ -15,7 +15,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class PlayButton extends BaseVideoPlayerPlugin<PlayButton.IPlayButton> implements View.OnClickListener, IStatePanel {
+public class PlayButton extends BaseVideoPlayerPlugin<IPlayButton> implements View.OnClickListener, IStatePanel, IInteraction {
 
     public static PlayButton newInstance() {
         return new PlayButton();
@@ -55,28 +55,39 @@ public class PlayButton extends BaseVideoPlayerPlugin<PlayButton.IPlayButton> im
             if (mPlayer.isPlaying()) {
                 pause();
             } else {
-                start();
+                play();
             }
         }
     }
 
-    private void pause() {
-        if (mPlayer != null) {
-            mBoard.mIsPlaying = false;
-            mPlayer.pause();
-            updateUI();
-
-            triggerPluginPause();
-        }
-    }
-
-    private void start() {
+    @Override
+    public void play() {
         if (mPlayer != null) {
             mBoard.mIsPlaying = true;
             mPlayer.start();
             updateUI();
 
-            triggerPluginPlay();
+            triggerPluginOnPlay();
+        }
+    }
+
+    @Override
+    public void pause() {
+        if (mPlayer != null) {
+            mBoard.mIsPlaying = false;
+            mPlayer.pause();
+            updateUI();
+
+            triggerPluginOnPause();
+        }
+    }
+
+    @Override
+    public void togglePlayPause() {
+        if (mBoard.mIsPlaying) {
+            pause();
+        } else {
+            play();
         }
     }
 
@@ -98,41 +109,41 @@ public class PlayButton extends BaseVideoPlayerPlugin<PlayButton.IPlayButton> im
     }
 
     @Override
-    public void togglePlayPause() {
-        if (mBoard.mIsPlaying) {
-            pause();
-        } else {
-            start();
-        }
-    }
-
-    @Override
     public void addSubscriber(IPlayButton plugin) {
         super.addSubscriber(plugin);
         mSubscribers.add(plugin);
     }
 
-    public interface IPlayButton {
-        void play();
 
-        void pause();
-    }
-
-    private void triggerPluginPlay() {
+    private void triggerPluginOnPlay() {
         if (!mSubscribers.isEmpty()) {
             for (IPlayButton p : mSubscribers) {
-                p.play();
+                p.onPlay();
             }
         }
     }
 
-    private void triggerPluginPause() {
+    private void triggerPluginOnPause() {
         if (!mSubscribers.isEmpty()) {
             for (IPlayButton p : mSubscribers) {
-                p.pause();
+                p.onPause();
             }
         }
     }
 
 
+}
+
+interface IPlayButton {
+    void onPlay();
+
+    void onPause();
+}
+
+interface IPlayButtonReverse {
+    void play();
+
+    void pause();
+
+    void togglePlayPause();
 }

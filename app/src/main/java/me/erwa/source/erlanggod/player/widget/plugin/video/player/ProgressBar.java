@@ -15,7 +15,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar> implements SeekBar.OnSeekBarChangeListener {
+public class ProgressBar extends BaseVideoPlayerPlugin<IProgressBar> implements SeekBar.OnSeekBarChangeListener {
 
     public static ProgressBar newInstance() {
         return new ProgressBar();
@@ -114,9 +114,6 @@ public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar>
         return (duration - position) < 9000 ? duration - 9000 : position;
     }
 
-    public interface IProgressBar {
-        void onUpdateProgress();
-    }
 
     @Override
     public void addSubscriber(IProgressBar plugin) {
@@ -126,8 +123,12 @@ public class ProgressBar extends BaseVideoPlayerPlugin<ProgressBar.IProgressBar>
     private void triggerPluginOnUpdateProgress() {
         if (!mSubscribers.isEmpty()) {
             for (IProgressBar p : mSubscribers) {
-                p.onUpdateProgress();
+                p.onProgressUpdate();
             }
         }
     }
+}
+
+interface IProgressBar {
+    void onProgressUpdate();
 }

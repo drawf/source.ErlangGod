@@ -28,7 +28,7 @@ import me.erwa.source.erlanggod.utils.LogUtils;
  * ------------------------------
  */
 
-public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements PlayButton.IPlayButton {
+public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IPlayButton {
 
     public static StatePanel newInstance() {
         return new StatePanel();
@@ -84,7 +84,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     }
 
     @Override
-    public void play() {
+    public void onPlay() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
@@ -94,7 +94,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
     }
 
     @Override
-    public void pause() {
+    public void onPause() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
@@ -266,7 +266,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
         isSeekEnd = true;
         newPosition = -1;
         currentPosition = -1;
-        if (!mBoard.mIsPlaying){
+        if (!mBoard.mIsPlaying) {
             mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
             mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         }
@@ -327,6 +327,5 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements Pl
 }
 
 //双向订阅时不能定义内部接口
-interface IStatePanel {
-    void togglePlayPause();
+interface IStatePanel extends IPlayButtonReverse {
 }

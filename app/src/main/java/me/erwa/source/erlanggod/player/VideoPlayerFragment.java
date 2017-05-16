@@ -11,9 +11,11 @@ import android.view.WindowManager;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
+import me.erwa.source.erlanggod.player.widget.Couple;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.BackButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.Interaction;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
@@ -51,16 +53,22 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
         mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
-        mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
+                mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
         mBinding.videoView.setMediaController(mediaControllerBoard);
 
+        mediaControllerBoard.addPlugin(OperationBar.newInstance());
         mediaControllerBoard.addPlugin(ProgressBar.newInstance());
         mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
         mediaControllerBoard.addPlugin(Download.newInstance());
-        mediaControllerBoard.addPlugin(OperationBar.newInstance());
         mediaControllerBoard.addPlugin(BackButton.newInstance());
         mediaControllerBoard.addPlugin(StatePanel.newInstance());
-        mediaControllerBoard.addPlugin(true, PlayButton.newInstance(), StatePanel.class);
+
+        mediaControllerBoard.addPlugin(Interaction.newInstance(),
+                Couple.in(ProgressBar.class, false));
+
+        mediaControllerBoard.addPlugin(PlayButton.newInstance(),
+                Couple.in(StatePanel.class, true),
+                Couple.in(Interaction.class, false));
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

@@ -2,18 +2,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 播放器顶部操作栏 -->
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ProgressBar
+            android:id="@+id/pb_loading"
             style="?android:progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:indeterminate="true"/>
 
+        <TextView
+            android:id="@+id/tv_bitrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pb_loading"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="0KB/s"
+            android:textColor="#1797EB"
+            android:textSize="12sp"/>
     </RelativeLayout>
 </layout>

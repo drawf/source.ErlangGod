@@ -55,6 +55,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     public AudioManager mAM;
     public MediaPlayerControl mPlayer;
     public ViewDataBinding mBinding;
+    public PLVideoView mVideoView;
     // TODO: drawf 2017/5/16 考虑将状态数据封装起来
     public boolean mIsPlaying;
     public boolean mOperationShowing;
@@ -122,6 +123,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     @Override
     public void setAnchorView(View view) {
         this.mAnchor = (ViewGroup) view;
+        this.mVideoView = (PLVideoView) mAnchor.findViewById(R.id.video_view);
+
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         if (this.getParent() != null) {
@@ -144,9 +147,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     }
 
     private void initListener() {
-        final PLVideoView videoView = (PLVideoView) this.mAnchor.findViewById(R.id.video_view);
-
-        videoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
+        mVideoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
                 switch (what) {
@@ -159,7 +160,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             }
         });
 
-        videoView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
+        mVideoView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int errorCode) {
                 triggerPluginOnErrorListener(plMediaPlayer, errorCode);
@@ -169,24 +170,24 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             }
         });
 
-        videoView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
+        mVideoView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(PLMediaPlayer plMediaPlayer) {
                 triggerPluginOnCompletionListener(plMediaPlayer);
 
-                LogUtils.trace("onCompletion:" + videoView.getCurrentPosition() + "==>" + videoView.getDuration());
+                LogUtils.trace("onCompletion:" + mVideoView.getCurrentPosition() + "==>" + mVideoView.getDuration());
                 ToastUtils.show("播放完毕");
             }
         });
 
-        videoView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
+        mVideoView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(PLMediaPlayer plMediaPlayer) {
                 triggerPluginOnPreparedListener(plMediaPlayer);
             }
         });
 
-        videoView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
+        mVideoView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
             @Override
             public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
                 triggerPluginOnSeekCompleteListener(plMediaPlayer);

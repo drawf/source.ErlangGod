@@ -84,13 +84,10 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
         long duration = mPlayer.getDuration();
         if (duration > 0) {
             long pos = 1000L * position / duration;
-//            LogUtils.trace(pos);
             mBinding.includeBottomBar.sbProgress.setProgress((int) pos);
         }
         mBinding.includeBottomBar.sbProgress.setSecondaryProgress(mPlayer.getBufferPercentage() * 10);
         mBinding.includeBottomBar.tvTime.setText(String.format("%s/%s", generateTime(position), generateTime(duration)));
-
-//        LogUtils.trace("%s,,%s", position, duration);
     }
 
     private String generateTime(long position) {
@@ -125,7 +122,8 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
     @Override
     public void onStopTrackingTouch(final SeekBar seekBar) {
         mPlayer.seekTo(calculateNewPosition(mPlayer.getDuration(), seekBar.getProgress()));
-        mBoard.show();
+        mHandler.sendMessage(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS));
+        doAction(OperationBar.ACTION_DO_SHOW);
         mDragging = false;
     }
 

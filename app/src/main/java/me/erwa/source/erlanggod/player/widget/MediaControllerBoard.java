@@ -21,7 +21,6 @@ import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
@@ -233,7 +232,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         triggerPluginInit();
     }
 
-    public interface IPlugin<P> {
+    public interface IPlugin {
         void init(MediaControllerBoard board);
 
         void onShow();
@@ -250,32 +249,21 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
         void onSeekComplete(PLMediaPlayer plMediaPlayer);
 
-        void addSubscriber(P plugin);
-
         void onLifePause();
 
         void onLifeResume();
 
         boolean onTouchEvent(MotionEvent event);
+
+        void doAction(int action);
+
+        void onAction(int action);
     }
 
     /**
      * @param plugin  要添加的插件
-     * @param couples 要订阅的插件
      */
-    public void addPlugin(IPlugin plugin, Couple... couples) {
-        if (couples != null && !mPlugins.isEmpty()) {
-            for (IPlugin p : mPlugins) {
-                for (Couple couple : Arrays.asList(couples)) {
-                    if (p.getClass().equals(couple.clazz)) {
-                        p.addSubscriber(plugin);
-                        if (couple.bilateral) {
-                            plugin.addSubscriber(p);
-                        }
-                    }
-                }
-            }
-        }
+    public void addPlugin(IPlugin plugin) {
         mPlugins.add(plugin);
     }
 
@@ -367,6 +355,14 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             }
         }
         return false;
+    }
+
+    public void triggerPluginOnAction(int action) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onAction(action);
+            }
+        }
     }
 
 }

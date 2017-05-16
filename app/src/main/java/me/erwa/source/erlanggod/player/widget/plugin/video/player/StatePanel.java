@@ -15,8 +15,6 @@ import android.view.animation.AnimationUtils;
 
 import com.pili.pldroid.player.PLMediaPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import me.erwa.source.erlanggod.R;
@@ -28,7 +26,7 @@ import me.erwa.source.erlanggod.utils.LogUtils;
  * ------------------------------
  */
 
-public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IPlayButton {
+public class StatePanel extends BaseVideoPlayerPlugin {
 
     public static StatePanel newInstance() {
         return new StatePanel();
@@ -36,7 +34,6 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IP
 
     private GestureDetector mGestureDetector;
     private MyGestureListener mMyGestureListener;
-    private List<IStatePanel> mSubscribers = new ArrayList<>();
 
     private static int sTimeout = 1500;
     private static final int FLAG_STATE_PANEL_HIDE = 0;
@@ -84,6 +81,18 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IP
     }
 
     @Override
+    public void onAction(int action) {
+        super.onAction(action);
+        switch (action) {
+            case PlayButton.ACTION_ON_PLAY:
+                onPlay();
+                break;
+            case PlayButton.ACTION_ON_PAUSE:
+                onPause();
+                break;
+        }
+    }
+
     public void onPlay() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
@@ -93,7 +102,6 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IP
         mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_play);
     }
 
-    @Override
     public void onPause() {
         mBinding.includeStatePanel.tvDuration.setVisibility(View.GONE);
         viewFadeInAnim(mBinding.includeStatePanel.container);
@@ -121,7 +129,7 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IP
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             //playing state control
-            triggerPluginTogglePlayPause();
+            doAction(PlayButton.ACTION_DO_TOGGLE_PLAY_PAUSE);
             return true;
         }
 
@@ -308,24 +316,4 @@ public class StatePanel extends BaseVideoPlayerPlugin<IStatePanel> implements IP
         view.setVisibility(View.GONE);
     }
 
-
-    @Override
-    public void addSubscriber(IStatePanel plugin) {
-        super.addSubscriber(plugin);
-        mSubscribers.add(plugin);
-    }
-
-    private void triggerPluginTogglePlayPause() {
-        if (!mSubscribers.isEmpty()) {
-            for (IStatePanel p : mSubscribers) {
-                p.togglePlayPause();
-            }
-        } else {
-            LogUtils.w("togglePlayPause has no subscriber!");
-        }
-    }
-}
-
-//双向订阅时不能定义内部接口
-interface IStatePanel extends IPlayButtonReverse {
 }

@@ -4,9 +4,6 @@ import android.view.View;
 
 import com.pili.pldroid.player.PLMediaPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
@@ -15,13 +12,18 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class PlayButton extends BaseVideoPlayerPlugin<IPlayButton> implements View.OnClickListener, IStatePanel, IInteraction {
+public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
+
+    public static final int ACTION_ON_PLAY = BASE_ACTION_PLAY_BUTTON + 0;
+    public static final int ACTION_ON_PAUSE = BASE_ACTION_PLAY_BUTTON + 1;
+    public static final int ACTION_DO_PLAY = BASE_ACTION_PLAY_BUTTON + 10;
+    public static final int ACTION_DO_PAUSE = BASE_ACTION_PLAY_BUTTON + 11;
+    public static final int ACTION_DO_TOGGLE_PLAY_PAUSE = BASE_ACTION_PLAY_BUTTON + 12;
+
 
     public static PlayButton newInstance() {
         return new PlayButton();
     }
-
-    private List<IPlayButton> mSubscribers = new ArrayList<>();
 
     @Override
     public void init(MediaControllerBoard board) {
@@ -43,6 +45,22 @@ public class PlayButton extends BaseVideoPlayerPlugin<IPlayButton> implements Vi
 //        start();
     }
 
+    @Override
+    public void onAction(int action) {
+        super.onAction(action);
+        switch (action) {
+            case ACTION_DO_PLAY:
+                play();
+                break;
+            case ACTION_DO_PAUSE:
+                pause();
+                break;
+            case ACTION_DO_TOGGLE_PLAY_PAUSE:
+                togglePlayPause();
+                break;
+        }
+    }
+
     private void updateUI() {
         mBinding.includeBottomBar.ibPlay.setImageResource(mBoard.mIsPlaying ?
                 R.drawable.ic_media_controller_state_play_small : R.drawable.ic_media_controller_state_pause_small);
@@ -60,29 +78,26 @@ public class PlayButton extends BaseVideoPlayerPlugin<IPlayButton> implements Vi
         }
     }
 
-    @Override
     public void play() {
         if (mPlayer != null) {
             mBoard.mIsPlaying = true;
             mPlayer.start();
             updateUI();
 
-            triggerPluginOnPlay();
+            doAction(ACTION_ON_PLAY);
         }
     }
 
-    @Override
     public void pause() {
         if (mPlayer != null) {
             mBoard.mIsPlaying = false;
             mPlayer.pause();
             updateUI();
 
-            triggerPluginOnPause();
+            doAction(ACTION_ON_PAUSE);
         }
     }
 
-    @Override
     public void togglePlayPause() {
         if (mBoard.mIsPlaying) {
             pause();
@@ -108,42 +123,4 @@ public class PlayButton extends BaseVideoPlayerPlugin<IPlayButton> implements Vi
         }
     }
 
-    @Override
-    public void addSubscriber(IPlayButton plugin) {
-        super.addSubscriber(plugin);
-        mSubscribers.add(plugin);
-    }
-
-
-    private void triggerPluginOnPlay() {
-        if (!mSubscribers.isEmpty()) {
-            for (IPlayButton p : mSubscribers) {
-                p.onPlay();
-            }
-        }
-    }
-
-    private void triggerPluginOnPause() {
-        if (!mSubscribers.isEmpty()) {
-            for (IPlayButton p : mSubscribers) {
-                p.onPause();
-            }
-        }
-    }
-
-
-}
-
-interface IPlayButton {
-    void onPlay();
-
-    void onPause();
-}
-
-interface IPlayButtonReverse {
-    void play();
-
-    void pause();
-
-    void togglePlayPause();
 }

@@ -11,7 +11,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.BasePlugin;
  * ------------------------------
  */
 
-public class BaseVideoPlayerPlugin<P> extends BasePlugin<MediaControllerBoardBinding, P> {
+public class BaseVideoPlayerPlugin extends BasePlugin<MediaControllerBoardBinding> {
 
     protected MediaControllerBoardBinding mBinding;
 

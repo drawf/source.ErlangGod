@@ -16,7 +16,7 @@ import me.erwa.source.erlanggod.utils.LogUtils;
  * ------------------------------
  */
 
-public class BasePlugin<B extends ViewDataBinding, P> implements MediaControllerBoard.IPlugin<P> {
+public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoard.IPlugin {
 
     protected MediaControllerBoard mBoard;
     protected Context mContext;
@@ -124,11 +124,6 @@ public class BasePlugin<B extends ViewDataBinding, P> implements MediaController
     }
 
     @Override
-    public void addSubscriber(P plugin) {
-
-    }
-
-    @Override
     public void onLifePause() {
 
     }
@@ -141,5 +136,18 @@ public class BasePlugin<B extends ViewDataBinding, P> implements MediaController
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return false;
+    }
+
+    public static final int BASE_ACTION_PLAY_BUTTON = 100;
+    public static final int BASE_ACTION_PROGRESS_BAR = 200;
+
+    @Override
+    public void doAction(int action) {
+        mBoard.triggerPluginOnAction(action);
+    }
+
+    @Override
+    public void onAction(int action) {
+
     }
 }

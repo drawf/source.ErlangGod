@@ -4,8 +4,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.SeekBar;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
@@ -15,16 +13,18 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class ProgressBar extends BaseVideoPlayerPlugin<IProgressBar> implements SeekBar.OnSeekBarChangeListener {
+public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeekBarChangeListener {
+
+    public static final int ACTION_ON_UPDATE_PROGRESS = BASE_ACTION_PROGRESS_BAR + 0;
 
     public static ProgressBar newInstance() {
         return new ProgressBar();
     }
 
     private static final int FLAG_UPDATE_PROGRESS = 1;
-    private List<IProgressBar> mSubscribers = new ArrayList<>();
 
     private boolean mDragging;//拖动进度条时
+    private boolean mShowing;//操作栏显示时
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -33,7 +33,7 @@ public class ProgressBar extends BaseVideoPlayerPlugin<IProgressBar> implements 
                     updateProgress();
                     if (!mDragging) {
                         sendMessageDelayed(obtainMessage(FLAG_UPDATE_PROGRESS), 1000);
-                        triggerPluginOnUpdateProgress();
+                        doAction(ACTION_ON_UPDATE_PROGRESS);
                     }
                     break;
             }
@@ -48,17 +48,19 @@ public class ProgressBar extends BaseVideoPlayerPlugin<IProgressBar> implements 
 
     @Override
     public void onShow() {
+        mShowing = true;
+        mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
         mHandler.sendMessage(mHandler.obtainMessage(FLAG_UPDATE_PROGRESS));
     }
 
     @Override
     public void onHide() {
-        mHandler.removeMessages(FLAG_UPDATE_PROGRESS);
+        mShowing = false;
     }
 
 
     private void updateProgress() {
-        if (mPlayer == null || mDragging) return;
+        if (mPlayer == null || mDragging || !mShowing) return;
 
         long position = mPlayer.getCurrentPosition();
         long duration = mPlayer.getDuration();
@@ -114,21 +116,5 @@ public class ProgressBar extends BaseVideoPlayerPlugin<IProgressBar> implements 
         return (duration - position) < 9000 ? duration - 9000 : position;
     }
 
-
-    @Override
-    public void addSubscriber(IProgressBar plugin) {
-        mSubscribers.add(plugin);
-    }
-
-    private void triggerPluginOnUpdateProgress() {
-        if (!mSubscribers.isEmpty()) {
-            for (IProgressBar p : mSubscribers) {
-                p.onProgressUpdate();
-            }
-        }
-    }
 }
 
-interface IProgressBar {
-    void onProgressUpdate();
-}

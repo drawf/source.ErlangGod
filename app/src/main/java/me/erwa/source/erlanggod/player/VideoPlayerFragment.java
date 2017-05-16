@@ -11,7 +11,6 @@ import android.view.WindowManager;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
-import me.erwa.source.erlanggod.player.widget.Couple;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.BackButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
@@ -62,13 +61,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(Download.newInstance());
         mediaControllerBoard.addPlugin(BackButton.newInstance());
         mediaControllerBoard.addPlugin(StatePanel.newInstance());
-
-        mediaControllerBoard.addPlugin(Interaction.newInstance(),
-                Couple.in(ProgressBar.class, false));
-
-        mediaControllerBoard.addPlugin(PlayButton.newInstance(),
-                Couple.in(StatePanel.class, true),
-                Couple.in(Interaction.class, false));
+        mediaControllerBoard.addPlugin(Interaction.newInstance());
+        mediaControllerBoard.addPlugin(PlayButton.newInstance());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

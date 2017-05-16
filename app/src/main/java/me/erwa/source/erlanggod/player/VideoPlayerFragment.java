@@ -50,8 +50,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
     private void init() {
         mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
-//        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
-        mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
+        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
+//        mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
         mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
         mBinding.videoView.setMediaController(mediaControllerBoard);
 

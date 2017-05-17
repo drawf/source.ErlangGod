@@ -1,6 +1,8 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.net.TrafficStats;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -21,6 +23,18 @@ public class LoadingPanel extends BaseVideoPlayerPlugin {
     }
 
     private long lastBytes;
+    private static final int FLAG_UPDATE_CACHE_SPEED = 1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case FLAG_UPDATE_CACHE_SPEED:
+                    sendMessageDelayed(obtainMessage(FLAG_UPDATE_CACHE_SPEED), 1000);
+                    setCacheSpeed();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void init(MediaControllerBoard board) {
@@ -41,28 +55,24 @@ public class LoadingPanel extends BaseVideoPlayerPlugin {
         }
     }
 
-    @Override
-    public void onAction(int action) {
-        super.onAction(action);
-        switch (action) {
-            case ProgressBar.ACTION_ON_UPDATE_PROGRESS:
-                setCacheSpeed();
-                break;
-        }
-    }
-
     private void togglePanel(boolean b) {
         mBinding.includeLoadingPanel.container.setVisibility(b ? View.VISIBLE : View.GONE);
+        if (b) {
+            lastBytes = TrafficStats.getTotalRxBytes();
+            mHandler.sendEmptyMessage(FLAG_UPDATE_CACHE_SPEED);
+        } else {
+            mHandler.removeMessages(FLAG_UPDATE_CACHE_SPEED);
+        }
     }
 
     private void setCacheSpeed() {
         long l = TrafficStats.getTotalRxBytes() - lastBytes;
         lastBytes = TrafficStats.getTotalRxBytes();
-        mBinding.includeLoadingPanel.tvBitrate.setText(formatBitrate(l));
+        mBinding.includeLoadingPanel.tvSpeed.setText(formatBytes(l));
     }
 
-    private String formatBitrate(long bitrate) {
-        double result = bitrate * 1.0 / 1024;
+    private String formatBytes(long bytes) {
+        double result = bytes * 1.0 / 1024;
         String unit = "KB/s";
         if (result > 1024) {
             result /= 1024;

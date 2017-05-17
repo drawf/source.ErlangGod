@@ -21,10 +21,10 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
         return new ProgressBar();
     }
 
-    private static final int FLAG_UPDATE_PROGRESS = 1;
 
     private boolean mDragging;//拖动进度条时
     private boolean mShowing;//操作栏显示时
+    private static final int FLAG_UPDATE_PROGRESS = 1;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

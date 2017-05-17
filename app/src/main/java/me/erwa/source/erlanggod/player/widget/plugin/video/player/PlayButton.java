@@ -14,7 +14,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
-    public static final int ACTION_ON_PLAY = BASE_ACTION_PLAY_BUTTON + 0;
+    public static final int ACTION_ON_PLAY = BASE_ACTION_PLAY_BUTTON;
     public static final int ACTION_ON_PAUSE = BASE_ACTION_PLAY_BUTTON + 1;
     public static final int ACTION_DO_PLAY = BASE_ACTION_PLAY_BUTTON + 10;
     public static final int ACTION_DO_PAUSE = BASE_ACTION_PLAY_BUTTON + 11;

@@ -10,10 +10,10 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  * ------------------------------
  */
 
-public class BackButton extends BaseVideoPlayerPlugin {
+public class CloseButton extends BaseVideoPlayerPlugin {
 
-    public static BackButton newInstance() {
-        return new BackButton();
+    public static CloseButton newInstance() {
+        return new CloseButton();
     }
 
     @Override

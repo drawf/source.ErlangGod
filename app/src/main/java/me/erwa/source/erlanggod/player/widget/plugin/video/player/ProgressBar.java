@@ -15,7 +15,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeekBarChangeListener {
 
-    public static final int ACTION_ON_UPDATE_PROGRESS = BASE_ACTION_PROGRESS_BAR + 0;
+    public static final int ACTION_ON_UPDATE_PROGRESS = BASE_ACTION_PROGRESS_BAR;
 
     public static ProgressBar newInstance() {
         return new ProgressBar();

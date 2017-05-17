@@ -134,6 +134,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
 
     /**
      * 发出的动作命令
+     *
      * @param action
      */
     @Override
@@ -143,10 +144,22 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
 
     /**
      * 订阅的动作命令
+     *
      * @param action
      */
     @Override
     public void onAction(int action) {
 
     }
+
+    @Override
+    public <T> T fetchData(int action) {
+        return (T) onFetchData(action);
+    }
+
+    @Override
+    public Object onFetchData(int action) {
+        return mBoard.triggerPluginOnFetchData(action);
+    }
+
 }

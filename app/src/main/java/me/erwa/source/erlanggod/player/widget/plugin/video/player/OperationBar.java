@@ -16,8 +16,8 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 public class OperationBar extends BaseVideoPlayerPlugin {
 
-    public static final int ACTION_ON_SHOW = BASE_ACTION_OPERATION_BAR + 1;
-    public static final int ACTION_ON_HIDE = BASE_ACTION_OPERATION_BAR + 2;
+    public static final int ACTION_ON_SHOW = BASE_ACTION_OPERATION_BAR;
+    public static final int ACTION_ON_HIDE = BASE_ACTION_OPERATION_BAR + 1;
     public static final int ACTION_DO_SHOW = BASE_ACTION_OPERATION_BAR + 10;
     public static final int ACTION_DO_HIDE = BASE_ACTION_OPERATION_BAR + 11;
     public static final int ACTION_DO_TOGGLE_SHOW_HIDE = BASE_ACTION_OPERATION_BAR + 12;

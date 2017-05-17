@@ -221,6 +221,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         void doAction(int action);
 
         void onAction(int action);
+
+        <T> T fetchData(int action);
+
+        Object onFetchData(int action);
     }
 
     /**
@@ -310,6 +314,18 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
                 p.onAction(action);
             }
         }
+    }
+
+    public Object triggerPluginOnFetchData(int action) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                Object o = p.onFetchData(action);
+                if (o != null) {
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 
 }

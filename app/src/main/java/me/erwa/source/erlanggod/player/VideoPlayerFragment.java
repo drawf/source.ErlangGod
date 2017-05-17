@@ -67,29 +67,77 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
 
         String info = "{\n" +
-                "        \"_id\": \"54cc72a0abc5bbb971f99bb2\",\n" +
-                "        \"name\": \"有理数引入\",\n" +
-                "        \"thumbnail\": \"https://ol00xuufp.qnssl.com/%E6%9C%89%E7%90%86%E6%95%B0%E7%9A%84%E5%BC%95%E5%85%A5.jpg\",\n" +
-                "        \"video\": \"5666910618b9b5ff9992a619\",\n" +
-                "        \"titleTime\": 8.346,\n" +
-                "        \"finishTime\": 383.056,\n" +
-                "        \"duration\": 383.056,\n" +
+                "        \"_id\": \"57ff2b1a5a149bc467ce922a\",\n" +
+                "        \"duration\": 400.22,\n" +
+                "        \"finishTime\": 400.22,\n" +
+                "        \"titleTime\": 8.068,\n" +
+                "        \"video\": \"57fef7ef5b4b792c56dec81a\",\n" +
+                "        \"name\": \"特殊直角三角形的三边关系\",\n" +
+                "        \"__v\": 0,\n" +
+                "        \"thumbnail\": \"https://course.yangcong345.com/%E5%8B%BE%E8%82%A1%E5%AE%9A%E7%90%86_A14_%E7%89%B9%E6%AE%8A%E7%9B%B4%E8%A7%92%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E4%B8%89%E8%BE%B9%E5%85%B3%E7%B3%BB.bmp\",\n" +
                 "        \"replace\": true,\n" +
+                "        \"desc\": \"\",\n" +
                 "        \"sections\": [],\n" +
-                "        \"interactions\": [],\n" +
+                "        \"interactions\": [\n" +
+                "            {\n" +
+                "                \"jump\": 0,\n" +
+                "                \"time\": 133.477,\n" +
+                "                \"_id\": \"57ff2f56ac0d19594b4c7c49\",\n" +
+                "                \"choices\": [\n" +
+                "                    {\n" +
+                "                        \"correct\": true,\n" +
+                "                        \"body\": \"A\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"correct\": false,\n" +
+                "                        \"body\": \"B\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"jump\": 0,\n" +
+                "                \"time\": 229.477,\n" +
+                "                \"_id\": \"57ff2f56ac0d19594b4c7c48\",\n" +
+                "                \"choices\": [\n" +
+                "                    {\n" +
+                "                        \"correct\": true,\n" +
+                "                        \"body\": \"A\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"correct\": false,\n" +
+                "                        \"body\": \"B\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"jump\": 0,\n" +
+                "                \"time\": 255.477,\n" +
+                "                \"_id\": \"57ff2f56ac0d19594b4c7c47\",\n" +
+                "                \"choices\": [\n" +
+                "                    {\n" +
+                "                        \"correct\": false,\n" +
+                "                        \"body\": \"A\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"correct\": true,\n" +
+                "                        \"body\": \"B\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        ],\n" +
                 "        \"url\": {\n" +
                 "            \"mobile\": {\n" +
-                "                \"mp4_middle\": \"http://private.media.yangcong345.com/mobileM/mobileM_57d6b6d9ba53a54020ced8d0.mp4\",\n" +
-                "                \"hls_low\": \"https://o558dvxry.qnssl.com/mobileL/mobileL_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
-                "                \"hls_middle\": \"https://o558dvxry.qnssl.com/mobileM/mobileM_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
-                "                \"mp4_middle_md5\": \"a48771c9b910e68308e5d75e1430beca\"\n" +
+                "                \"mp4_middle\": \"http://private.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.mp4\",\n" +
+                "                \"hls_low\": \"https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"hls_middle\": \"https://hls.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"mp4_middle_md5\": \"d4d09be61e3e172125ffd31501e76660\"\n" +
                 "            },\n" +
                 "            \"pc\": {\n" +
-                "                \"hls_high\": \"https://o558dvxry.qnssl.com/high/high_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
-                "                \"hls_low\": \"https://o558dvxry.qnssl.com/pcL/pcL_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
-                "                \"hls_middle\": \"https://o558dvxry.qnssl.com/pcM/pcM_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
-                "                \"mp4_middle\": \"http://private.media.yangcong345.com/pcM/pcM_57d6b6d9ba53a54020ced8d0.mp4\",\n" +
-                "                \"mp4_high\": \"http://private.media.yangcong345.com/high/high_57d6b6d9ba53a54020ced8d0.mp4\"\n" +
+                "                \"hls_high\": \"https://hls.media.yangcong345.com/high/high_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"hls_low\": \"https://hls.media.yangcong345.com/pcL/pcL_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"hls_middle\": \"https://hls.media.yangcong345.com/pcM/pcM_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"mp4_middle\": \"http://private.media.yangcong345.com/pcM/pcM_586d5aa4065b7e9d714294fc.mp4\",\n" +
+                "                \"mp4_high\": \"http://private.media.yangcong345.com/high/high_586d5aa4065b7e9d714294fc.mp4\"\n" +
                 "            }\n" +
                 "        }\n" +
                 "    }";

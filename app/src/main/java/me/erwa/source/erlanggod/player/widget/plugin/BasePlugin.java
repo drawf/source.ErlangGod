@@ -153,13 +153,24 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
 
     }
 
+    /**
+     * 发出单向获取数据命令
+     * @param action
+     * @param <T>
+     * @return
+     */
     @Override
     public <T> T fetchData(int action) {
         return (T) mBoard.triggerPluginOnFetchData(action);
     }
 
+    /**
+     * 响应数据获取命令
+     * @param action
+     * @return
+     */
     @Override
-    public Object onFetchData(int action) {
+    public Object replyFetchData(int action) {
         return null;
     }
 

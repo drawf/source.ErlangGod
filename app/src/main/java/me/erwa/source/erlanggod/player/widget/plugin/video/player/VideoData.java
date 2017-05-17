@@ -12,8 +12,9 @@ import me.erwa.source.erlanggod.utils.Mapper;
 
 public class VideoData extends BaseVideoPlayerPlugin {
 
-    public static final int ACTION_ON_FETCH_INFO = BASE_ACTION_VIDEO_INFO + 30;
-    public static final int ACTION_ON_FETCH_VIDEO_NAME = BASE_ACTION_VIDEO_INFO + 31;
+    public static final int ACTION_FETCH_INFO = BASE_ACTION_VIDEO_INFO + 30;
+    public static final int ACTION_FETCH_NAME = BASE_ACTION_VIDEO_INFO + 31;
+    public static final int ACTION_FETCH_INTERACTIONS = BASE_ACTION_VIDEO_INFO + 32;
 
     private Map<String, Object> data;
 
@@ -27,12 +28,14 @@ public class VideoData extends BaseVideoPlayerPlugin {
     }
 
     @Override
-    public Object onFetchData(int action) {
+    public Object replyFetchData(int action) {
         switch (action) {
-            case ACTION_ON_FETCH_INFO:
+            case ACTION_FETCH_INFO:
                 return this.data;
-            case ACTION_ON_FETCH_VIDEO_NAME:
+            case ACTION_FETCH_NAME:
                 return Mapper.from(this.data).to("name").getString();
+            case ACTION_FETCH_INTERACTIONS:
+                return Mapper.from(this.data).to("interactions").getList();
             default:
                 return null;
         }

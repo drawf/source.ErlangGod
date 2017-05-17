@@ -12,7 +12,7 @@ public class VideoTitle extends BaseVideoPlayerPlugin {
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);
-        String name = fetchData(VideoData.ACTION_ON_FETCH_VIDEO_NAME);
+        String name = fetchData(VideoData.ACTION_FETCH_NAME);
         mBinding.includeTopBar.tvTitle.setText(name);
     }
 

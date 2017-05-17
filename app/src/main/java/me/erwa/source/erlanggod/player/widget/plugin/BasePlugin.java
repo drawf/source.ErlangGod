@@ -131,6 +131,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_PLAY_BUTTON = 100;
     protected static final int BASE_ACTION_PROGRESS_BAR = 200;
     protected static final int BASE_ACTION_OPERATION_BAR = 300;
+    protected static final int BASE_ACTION_VIDEO_INFO = 400;
 
     /**
      * 发出的动作命令
@@ -154,12 +155,12 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
 
     @Override
     public <T> T fetchData(int action) {
-        return (T) onFetchData(action);
+        return (T) mBoard.triggerPluginOnFetchData(action);
     }
 
     @Override
     public Object onFetchData(int action) {
-        return mBoard.triggerPluginOnFetchData(action);
+        return null;
     }
 
 }

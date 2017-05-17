@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
@@ -20,6 +26,8 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.StatePanel;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
 
 /**
  * Created by drawf on 2017/3/22.
@@ -57,14 +65,46 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
         mBinding.videoView.seekTo(10000);
 
-        mediaControllerBoard.addPlugin(OperationBar.newInstance());
-        mediaControllerBoard.addPlugin(ProgressBar.newInstance());
-        mediaControllerBoard.addPlugin(LoadingPanel.newInstance());
-        mediaControllerBoard.addPlugin(Download.newInstance());
-        mediaControllerBoard.addPlugin(CloseButton.newInstance());
-        mediaControllerBoard.addPlugin(StatePanel.newInstance());
-        mediaControllerBoard.addPlugin(Interaction.newInstance());
-        mediaControllerBoard.addPlugin(PlayButton.newInstance());
+
+        String info = "{\n" +
+                "        \"_id\": \"54cc72a0abc5bbb971f99bb2\",\n" +
+                "        \"name\": \"有理数引入\",\n" +
+                "        \"thumbnail\": \"https://ol00xuufp.qnssl.com/%E6%9C%89%E7%90%86%E6%95%B0%E7%9A%84%E5%BC%95%E5%85%A5.jpg\",\n" +
+                "        \"video\": \"5666910618b9b5ff9992a619\",\n" +
+                "        \"titleTime\": 8.346,\n" +
+                "        \"finishTime\": 383.056,\n" +
+                "        \"duration\": 383.056,\n" +
+                "        \"replace\": true,\n" +
+                "        \"sections\": [],\n" +
+                "        \"interactions\": [],\n" +
+                "        \"url\": {\n" +
+                "            \"mobile\": {\n" +
+                "                \"mp4_middle\": \"http://private.media.yangcong345.com/mobileM/mobileM_57d6b6d9ba53a54020ced8d0.mp4\",\n" +
+                "                \"hls_low\": \"https://o558dvxry.qnssl.com/mobileL/mobileL_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
+                "                \"hls_middle\": \"https://o558dvxry.qnssl.com/mobileM/mobileM_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
+                "                \"mp4_middle_md5\": \"a48771c9b910e68308e5d75e1430beca\"\n" +
+                "            },\n" +
+                "            \"pc\": {\n" +
+                "                \"hls_high\": \"https://o558dvxry.qnssl.com/high/high_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
+                "                \"hls_low\": \"https://o558dvxry.qnssl.com/pcL/pcL_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
+                "                \"hls_middle\": \"https://o558dvxry.qnssl.com/pcM/pcM_57d6b6d9ba53a54020ced8d0.m3u8\",\n" +
+                "                \"mp4_middle\": \"http://private.media.yangcong345.com/pcM/pcM_57d6b6d9ba53a54020ced8d0.mp4\",\n" +
+                "                \"mp4_high\": \"http://private.media.yangcong345.com/high/high_57d6b6d9ba53a54020ced8d0.mp4\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }";
+
+        mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
+        mediaControllerBoard.addPlugin(new VideoTitle());
+
+        mediaControllerBoard.addPlugin(new CloseButton());
+        mediaControllerBoard.addPlugin(new OperationBar());
+        mediaControllerBoard.addPlugin(new ProgressBar());
+        mediaControllerBoard.addPlugin(new LoadingPanel());
+        mediaControllerBoard.addPlugin(new Download());
+        mediaControllerBoard.addPlugin(new StatePanel());
+        mediaControllerBoard.addPlugin(new Interaction());
+        mediaControllerBoard.addPlugin(new PlayButton());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
@@ -104,5 +144,13 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 //                mediaControllerBoard.hide();
                 break;
         }
+    }
+
+    public static HashMap<String, Object> json2Map(String jsonStr) {
+        Type type = new TypeToken<HashMap<String, Object>>() {
+        }.getType();
+        Gson gson = new Gson();
+        HashMap<String, Object> map = gson.fromJson(jsonStr, type);
+        return map;
     }
 }

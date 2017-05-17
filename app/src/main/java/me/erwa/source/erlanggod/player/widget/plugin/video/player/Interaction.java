@@ -10,10 +10,6 @@ import me.erwa.source.erlanggod.utils.LogUtils;
 
 public class Interaction extends BaseVideoPlayerPlugin {
 
-    public static Interaction newInstance() {
-        return new Interaction();
-    }
-
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);

@@ -28,10 +28,6 @@ import me.erwa.source.erlanggod.utils.LogUtils;
 
 public class StatePanel extends BaseVideoPlayerPlugin {
 
-    public static StatePanel newInstance() {
-        return new StatePanel();
-    }
-
     private GestureDetector mGestureDetector;
     private MyGestureListener mMyGestureListener;
 

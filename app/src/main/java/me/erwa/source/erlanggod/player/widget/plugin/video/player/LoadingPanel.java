@@ -17,11 +17,6 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
  */
 
 public class LoadingPanel extends BaseVideoPlayerPlugin {
-
-    public static LoadingPanel newInstance() {
-        return new LoadingPanel();
-    }
-
     private long lastBytes;
     private static final int FLAG_UPDATE_CACHE_SPEED = 1;
     private Handler mHandler = new Handler() {

@@ -12,10 +12,6 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 public class CloseButton extends BaseVideoPlayerPlugin {
 
-    public static CloseButton newInstance() {
-        return new CloseButton();
-    }
-
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);

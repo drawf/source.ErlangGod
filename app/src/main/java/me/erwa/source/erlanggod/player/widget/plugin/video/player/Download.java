@@ -14,10 +14,6 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
 
 public class Download extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
-    public static Download newInstance() {
-        return new Download();
-    }
-
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);

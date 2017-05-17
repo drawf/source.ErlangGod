@@ -23,10 +23,6 @@ public class OperationBar extends BaseVideoPlayerPlugin {
     public static final int ACTION_DO_TOGGLE_SHOW_HIDE = BASE_ACTION_OPERATION_BAR + 12;
     public static final int ACTION_DO_REMOVE_AUTO_HIDE = BASE_ACTION_OPERATION_BAR + 13;
 
-    public static OperationBar newInstance() {
-        return new OperationBar();
-    }
-
     private static final int sOperationTimeout = 5000;
     private static final int FLAG_OPERATION_HIDE = 1;
     private Handler mHandler = new Handler() {

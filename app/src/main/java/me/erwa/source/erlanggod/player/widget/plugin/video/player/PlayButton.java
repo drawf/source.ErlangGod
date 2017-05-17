@@ -20,10 +20,6 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
     public static final int ACTION_DO_PAUSE = BASE_ACTION_PLAY_BUTTON + 11;
     public static final int ACTION_DO_TOGGLE_PLAY_PAUSE = BASE_ACTION_PLAY_BUTTON + 12;
 
-    public static PlayButton newInstance() {
-        return new PlayButton();
-    }
-
     @Override
     public void init(MediaControllerBoard board) {
         super.init(board);

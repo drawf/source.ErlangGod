@@ -2,7 +2,6 @@ package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import java.util.Map;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.utils.Mapper;
 
 /**
@@ -20,11 +19,6 @@ public class VideoData extends BaseVideoPlayerPlugin {
 
     public VideoData(Map<String, Object> data) {
         this.data = data;
-    }
-
-    @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
     }
 
     @Override

@@ -9,8 +9,6 @@ import com.pili.pldroid.player.PLMediaPlayer;
 
 import java.text.DecimalFormat;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
-
 /**
  * Created by drawf on 26/04/2017.
  * ------------------------------
@@ -32,8 +30,8 @@ public class LoadingPanel extends BaseVideoPlayerPlugin {
     };
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
+    public void doInit() {
+        super.doInit();
         togglePanel(false);
     }
 

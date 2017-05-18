@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.utils.ToastUtils;
 
 /**
@@ -15,8 +14,8 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
 public class Download extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
+    public void doInit() {
+        super.doInit();
         mBinding.includeTopBar.ibDownload.setOnClickListener(this);
     }
 

@@ -18,7 +18,6 @@ import com.pili.pldroid.player.PLMediaPlayer;
 import java.util.Locale;
 
 import me.erwa.source.erlanggod.R;
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.utils.LogUtils;
 
 /**
@@ -51,8 +50,8 @@ public class StatePanel extends BaseVideoPlayerPlugin {
     };
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
+    public void doInit() {
+        super.doInit();
         mMyGestureListener = new MyGestureListener();
         mGestureDetector = new GestureDetector(mContext, mMyGestureListener);
         mBoard.show();//must call show

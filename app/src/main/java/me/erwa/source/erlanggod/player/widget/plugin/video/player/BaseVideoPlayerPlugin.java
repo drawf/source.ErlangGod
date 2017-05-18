@@ -1,9 +1,6 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
-import android.support.annotation.CallSuper;
-
 import me.erwa.source.erlanggod.databinding.MediaControllerBoardBinding;
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.BasePlugin;
 
 /**
@@ -15,10 +12,9 @@ public class BaseVideoPlayerPlugin extends BasePlugin<MediaControllerBoardBindin
 
     protected MediaControllerBoardBinding mBinding;
 
-    @CallSuper
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
+    public void doInit() {
+        super.doInit();
         mBinding = super.mBinding;
     }
 }

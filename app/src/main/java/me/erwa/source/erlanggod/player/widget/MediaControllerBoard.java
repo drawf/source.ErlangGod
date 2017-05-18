@@ -202,6 +202,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     public interface IPlugin {
         void init(MediaControllerBoard board);
 
+        void doInit();
+
         void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra);
 
         void onErrorListener(PLMediaPlayer plMediaPlayer, int errorCode);
@@ -238,6 +240,15 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.init(this);
+            }
+            triggerPluginDoInit();
+        }
+    }
+
+    private void triggerPluginDoInit() {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.doInit();
             }
         }
     }

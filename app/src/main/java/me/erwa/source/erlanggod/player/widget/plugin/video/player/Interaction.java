@@ -2,7 +2,6 @@ package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import java.util.List;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.utils.LogUtils;
 
 /**
@@ -19,11 +18,6 @@ import me.erwa.source.erlanggod.utils.LogUtils;
 public class Interaction extends BaseVideoPlayerPlugin {
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
-    }
-
-    @Override
     public void onAction(int action) {
         super.onAction(action);
         switch (action) {
@@ -38,6 +32,11 @@ public class Interaction extends BaseVideoPlayerPlugin {
         List list = fetchData(VideoData.ACTION_FETCH_INTERACTIONS);
         LogUtils.trace(list);
     }
+
+    private void triggerShow() {
+
+    }
+
 
 }
 

@@ -32,6 +32,11 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
         this.mBinding = (B) board.mBinding;
     }
 
+    @Override
+    public void doInit() {
+
+    }
+
     @CallSuper
     @Override
     public void onInfoListener(PLMediaPlayer plMediaPlayer, int what, int extra) {

@@ -5,7 +5,6 @@ import android.view.View;
 import com.pili.pldroid.player.PLMediaPlayer;
 
 import me.erwa.source.erlanggod.R;
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 
 /**
  * Created by drawf on 27/04/2017.
@@ -21,9 +20,8 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
     public static final int ACTION_DO_TOGGLE_PLAY_PAUSE = BASE_ACTION_PLAY_BUTTON + 12;
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
-
+    public void doInit() {
+        super.doInit();
         mBinding.includeBottomBar.ibPlay.setEnabled(false);
         mBinding.includeBottomBar.ibPlay.setOnClickListener(this);
     }

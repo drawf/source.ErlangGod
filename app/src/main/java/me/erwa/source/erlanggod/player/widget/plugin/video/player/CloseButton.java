@@ -3,8 +3,6 @@ package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 import android.app.Activity;
 import android.view.View;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
-
 /**
  * Created by drawf on 2017/5/8.
  * ------------------------------
@@ -13,9 +11,8 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 public class CloseButton extends BaseVideoPlayerPlugin {
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
-
+    public void doInit() {
+        super.doInit();
         this.mBinding.includeTopBar.ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -25,4 +22,5 @@ public class CloseButton extends BaseVideoPlayerPlugin {
             }
         });
     }
+
 }

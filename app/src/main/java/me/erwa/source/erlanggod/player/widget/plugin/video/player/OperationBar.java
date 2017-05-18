@@ -37,12 +37,6 @@ public class OperationBar extends BaseVideoPlayerPlugin {
     };
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
-    }
-
-
-    @Override
     public void onAction(int action) {
         super.onAction(action);
         switch (action) {

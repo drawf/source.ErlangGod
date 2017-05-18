@@ -6,8 +6,6 @@ import android.widget.SeekBar;
 
 import java.util.Locale;
 
-import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
-
 /**
  * Created by drawf on 26/04/2017.
  * ------------------------------
@@ -36,8 +34,8 @@ public class ProgressBar extends BaseVideoPlayerPlugin implements SeekBar.OnSeek
     };
 
     @Override
-    public void init(MediaControllerBoard board) {
-        super.init(board);
+    public void doInit() {
+        super.doInit();
         mBinding.includeBottomBar.sbProgress.setOnSeekBarChangeListener(this);
     }
 

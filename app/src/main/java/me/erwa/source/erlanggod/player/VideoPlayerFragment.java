@@ -142,8 +142,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
                 "        }\n" +
                 "    }";
 
-        mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
         mediaControllerBoard.addPlugin(new VideoTitle());
+        mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
 
         mediaControllerBoard.addPlugin(new CloseButton());
         mediaControllerBoard.addPlugin(new OperationBar());

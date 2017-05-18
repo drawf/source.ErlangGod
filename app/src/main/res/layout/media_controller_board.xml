@@ -30,6 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <include
+            android:id="@+id/include_interaction_panel"
+            layout="@layout/media_controller_interaction_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 
         <!--<TextView-->
         <!--android:id="@+id/ib_back"-->

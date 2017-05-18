@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/container_choices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/media_controller_interaction_choice_bg"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="想好了，继续"
+                android:textColor="@color/yc_gray5_primary"
+                android:textSize="14dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/action"
+            android:layout_width="88dp"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/media_controller_interaction_action_bg"
+            android:gravity="center"
+            android:text="隐藏按钮"
+            android:textColor="@color/yc_pure_white"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+</layout>

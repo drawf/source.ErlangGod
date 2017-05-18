@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:id="@+id/choice"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/media_controller_interaction_choice_height"
+        android:background="@drawable/media_controller_interaction_choice_bg"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="A"
+        android:textColor="@color/yc_gray5_primary"
+        android:textSize="14dp"/>
+</layout>

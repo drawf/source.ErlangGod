@@ -1,6 +1,7 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.databinding.DataBindingUtil;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,14 +54,16 @@ public class Interaction extends BaseVideoPlayerPlugin {
     private Map<String, Object> problem;
 
     private void detectInteraction() {
-        if (list.isEmpty()) return;
+        if (list.isEmpty() || shouldRest) return;
 
         long position = mPlayer.getCurrentPosition();
         for (Map<String, Object> map : list) {
             double point = Mapper.from(map).to("time").getDouble() * 1000;
             if (position >= point - 500 && position < point + 500) {
                 this.problem = map;
+                LogUtils.trace("%s,%s,%s", position, point - 500, point + 500);
                 showView();
+                break;
             }
         }
     }
@@ -95,7 +98,7 @@ public class Interaction extends BaseVideoPlayerPlugin {
                 @Override
                 public void onClick(View view) {
                     hideView();
-                    // TODO: drawf 2017/5/18  
+                    // TODO: drawf 2017/5/18
                 }
             });
 
@@ -104,6 +107,8 @@ public class Interaction extends BaseVideoPlayerPlugin {
     }
 
     private void hideView() {
+        takeRest();
+
         doAction(OperationBar.ACTION_DO_ENABLED);
         doAction(GesturePanel.ACTION_DO_ENABLED);
         doAction(PlayButton.ACTION_DO_PLAY);
@@ -111,6 +116,17 @@ public class Interaction extends BaseVideoPlayerPlugin {
         mBinding.includeInteractionPanel.container.setVisibility(View.GONE);
     }
 
+    private boolean shouldRest;
+
+    private void takeRest() {
+        shouldRest = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shouldRest = false;
+            }
+        }, 1000);
+    }
 
 }
 

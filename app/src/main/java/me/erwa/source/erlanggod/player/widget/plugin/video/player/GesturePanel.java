@@ -25,7 +25,10 @@ import me.erwa.source.erlanggod.utils.LogUtils;
  * ------------------------------
  */
 
-public class StatePanel extends BaseVideoPlayerPlugin {
+public class GesturePanel extends BaseVideoPlayerPlugin {
+
+    public static final int ACTION_DO_ENABLED = BASE_ACTION_GESTURE_PANEL + 10;
+    public static final int ACTION_DO_DISABLED = BASE_ACTION_GESTURE_PANEL + 11;
 
     private GestureDetector mGestureDetector;
     private MyGestureListener mMyGestureListener;
@@ -54,16 +57,16 @@ public class StatePanel extends BaseVideoPlayerPlugin {
         super.doInit();
         mMyGestureListener = new MyGestureListener();
         mGestureDetector = new GestureDetector(mContext, mMyGestureListener);
-        mBoard.show();//must call show
+        currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
+
         mBinding.includeStatePanel.container.setVisibility(View.GONE);
         mBinding.includeStatePanel.containerBrightness.setVisibility(View.GONE);
         mBinding.includeStatePanel.containerVolume.setVisibility(View.GONE);
-
-        currentVolume = mBoard.mAM.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!mEnabled) return true;
         if (mGestureDetector.onTouchEvent(event)) return true;
         // 处理手势结束
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -71,19 +74,30 @@ public class StatePanel extends BaseVideoPlayerPlugin {
                 endGesture();
                 break;
         }
-        return true;//should be true
+        //should be true to override touch event in media controller board
+        return true;
     }
 
     @Override
     public void onAction(int action) {
         super.onAction(action);
         switch (action) {
-            case PlayButton.ACTION_ON_PLAY:
-                onPlay();
+            case ACTION_DO_ENABLED:
+                doEnabled();
                 break;
-            case PlayButton.ACTION_ON_PAUSE:
-                onPause();
+            case ACTION_DO_DISABLED:
+                doDisabled();
                 break;
+        }
+        if (mEnabled) {
+            switch (action) {
+                case PlayButton.ACTION_ON_PLAY:
+                    onPlay();
+                    break;
+                case PlayButton.ACTION_ON_PAUSE:
+                    onPause();
+                    break;
+            }
         }
     }
 
@@ -102,6 +116,24 @@ public class StatePanel extends BaseVideoPlayerPlugin {
         mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
 
         mBinding.includeStatePanel.ivState.setImageResource(R.drawable.ic_media_controller_state_pause);
+    }
+
+
+    private boolean mEnabled = true;
+
+    private void doEnabled() {
+        mEnabled = true;
+    }
+
+    private void doDisabled() {
+        mEnabled = false;
+
+        //立即隐藏View
+        mHandler.removeMessages(FLAG_STATE_PANEL_HIDE);
+        mHandler.sendEmptyMessage(FLAG_STATE_PANEL_HIDE);
+
+        mHandler.removeMessages(FLAG_VOLUME_BRIGHTNESS_HIDE);
+        mHandler.sendEmptyMessage(FLAG_VOLUME_BRIGHTNESS_HIDE);
     }
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {

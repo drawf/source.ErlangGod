@@ -22,6 +22,8 @@ public class OperationBar extends BaseVideoPlayerPlugin {
     public static final int ACTION_DO_HIDE = BASE_ACTION_OPERATION_BAR + 11;
     public static final int ACTION_DO_TOGGLE_SHOW_HIDE = BASE_ACTION_OPERATION_BAR + 12;
     public static final int ACTION_DO_REMOVE_AUTO_HIDE = BASE_ACTION_OPERATION_BAR + 13;
+    public static final int ACTION_DO_ENABLED = BASE_ACTION_OPERATION_BAR + 14;
+    public static final int ACTION_DO_DISABLED = BASE_ACTION_OPERATION_BAR + 15;
 
     private static final int sOperationTimeout = 5000;
     private static final int FLAG_OPERATION_HIDE = 1;
@@ -35,6 +37,15 @@ public class OperationBar extends BaseVideoPlayerPlugin {
             }
         }
     };
+
+    @Override
+    public void doInit() {
+        super.doInit();
+        mBinding.includeTopBar.container.setVisibility(View.GONE);
+        mBinding.includeBottomBar.container.setVisibility(View.GONE);
+
+        doShow();
+    }
 
     @Override
     public void onAction(int action) {
@@ -53,6 +64,12 @@ public class OperationBar extends BaseVideoPlayerPlugin {
                 break;
             case ACTION_DO_REMOVE_AUTO_HIDE:
                 doRemoveAutoHide();
+                break;
+            case ACTION_DO_ENABLED:
+                doEnabled();
+                break;
+            case ACTION_DO_DISABLED:
+                doDisabled();
                 break;
         }
     }
@@ -114,4 +131,14 @@ public class OperationBar extends BaseVideoPlayerPlugin {
         mHandler.removeMessages(FLAG_OPERATION_HIDE);
     }
 
+    private boolean mEnabled = true;
+
+    private void doEnabled() {
+        mEnabled = true;
+    }
+
+    private void doDisabled() {
+        mEnabled = false;
+        doHide();
+    }
 }

@@ -25,7 +25,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.StatePanel;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
 
@@ -63,7 +63,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
         mBinding.videoView.setMediaController(mediaControllerBoard);
 
-        mBinding.videoView.seekTo(10000);
+        mBinding.videoView.seekTo(128000);
 
 
         String info = "{\n" +
@@ -150,7 +150,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new ProgressBar());
         mediaControllerBoard.addPlugin(new LoadingPanel());
         mediaControllerBoard.addPlugin(new Download());
-        mediaControllerBoard.addPlugin(new StatePanel());
+        mediaControllerBoard.addPlugin(new GesturePanel());
         mediaControllerBoard.addPlugin(new Interaction());
         mediaControllerBoard.addPlugin(new PlayButton());
 

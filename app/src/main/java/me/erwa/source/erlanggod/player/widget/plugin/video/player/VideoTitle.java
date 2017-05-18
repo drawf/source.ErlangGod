@@ -10,7 +10,7 @@ public class VideoTitle extends BaseVideoPlayerPlugin {
     @Override
     public void doInit() {
         super.doInit();
-        String name = fetchData(VideoData.ACTION_FETCH_NAME);
+        String name = (String) fetchData(VideoData.ACTION_FETCH_NAME);
         mBinding.includeTopBar.tvTitle.setText(name);
     }
 }

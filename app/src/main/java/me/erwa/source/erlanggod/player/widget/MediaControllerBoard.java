@@ -224,7 +224,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
         void onAction(int action);
 
-        <T> T fetchData(int action);
+        Object fetchData(int action);
 
         Object replyFetchData(int action);
     }

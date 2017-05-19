@@ -13,6 +13,7 @@ import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.MediaControllerInteractionChoiceBinding;
 import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.Mapper;
+import me.erwa.source.erlanggod.utils.ToastUtils;
 
 /**
  * Created by drawf on 2017/5/12.
@@ -37,6 +38,19 @@ public class Interaction extends BaseVideoPlayerPlugin {
         mBinding.includeInteractionPanel.container.setVisibility(View.GONE);
         choiceHeight = (int) mContext.getResources().getDimension(R.dimen.media_controller_interaction_choice_height);
         choiceMargin = (int) mContext.getResources().getDimension(R.dimen.media_controller_interaction_choice_margin);
+
+        mBinding.includeInteractionPanel.action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mBinding.includeInteractionPanel.containerChoices.getVisibility() == View.VISIBLE) {
+                    mBinding.includeInteractionPanel.containerChoices.setVisibility(View.GONE);
+                    mBinding.includeInteractionPanel.action.setText("显示按钮");
+                } else {
+                    mBinding.includeInteractionPanel.containerChoices.setVisibility(View.VISIBLE);
+                    mBinding.includeInteractionPanel.action.setText("隐藏按钮");
+                }
+            }
+        });
 
         list = (List<Map>) fetchData(VideoData.ACTION_FETCH_INTERACTIONS);
     }
@@ -97,8 +111,17 @@ public class Interaction extends BaseVideoPlayerPlugin {
             choiceBinding.choice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    boolean correct = Mapper.from(view.getTag()).to("correct").getBoolean();
+                    ToastUtils.show(correct + "");
+                    if (correct) {
+                        //跳转到指定位置
+                        double jump = Mapper.from(problem).to("jump").getDouble();
+                        int jumpMS = Double.valueOf(jump * 1000).intValue();
+                        if (jumpMS > 0) {
+                            mPlayer.seekTo(jumpMS);
+                        }
+                    }
                     hideView();
-                    // TODO: drawf 2017/5/18
                 }
             });
 
@@ -106,12 +129,13 @@ public class Interaction extends BaseVideoPlayerPlugin {
         }
     }
 
+    // TODO: drawf 2017/5/19 check 埋点 & 新增 播放控制插件
     private void hideView() {
         takeRest();
 
+        doAction(PlayButton.ACTION_DO_PLAY);
         doAction(OperationBar.ACTION_DO_ENABLED);
         doAction(GesturePanel.ACTION_DO_ENABLED);
-        doAction(PlayButton.ACTION_DO_PLAY);
 
         mBinding.includeInteractionPanel.container.setVisibility(View.GONE);
     }

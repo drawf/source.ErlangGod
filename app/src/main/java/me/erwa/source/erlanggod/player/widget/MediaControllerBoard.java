@@ -94,11 +94,11 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     }
 
     public void onLifePause() {
-        triggerPluginLifePause();
+        triggerPluginLifePause(mContext);
     }
 
     public void onLifeResume() {
-        triggerPluginLifeResume();
+        triggerPluginLifeResume(mContext);
     }
 
     // TODO: drawf 2017/5/16 事件优先级
@@ -214,9 +214,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
         void onSeekComplete(PLMediaPlayer plMediaPlayer);
 
-        void onLifePause();
+        void onLifePause(Context context);
 
-        void onLifeResume();
+        //最先执行，注意此时还未init
+        void onLifeResume(Context context);
 
         boolean onTouchEvent(MotionEvent event);
 
@@ -293,18 +294,18 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         }
     }
 
-    private void triggerPluginLifePause() {
+    private void triggerPluginLifePause(Context context) {
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
-                p.onLifePause();
+                p.onLifePause(context);
             }
         }
     }
 
-    private void triggerPluginLifeResume() {
+    private void triggerPluginLifeResume(Context context) {
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
-                p.onLifeResume();
+                p.onLifeResume(context);
             }
         }
     }

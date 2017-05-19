@@ -1,5 +1,6 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
+import android.content.Context;
 import android.view.View;
 
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -27,14 +28,14 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
     }
 
     @Override
-    public void onLifePause() {
-        super.onLifePause();
+    public void onLifePause(Context context) {
+        super.onLifePause(context);
         pause();
     }
 
     @Override
-    public void onLifeResume() {
-        super.onLifeResume();
+    public void onLifeResume(Context context) {
+        super.onLifeResume(context);
 //        start();
     }
 

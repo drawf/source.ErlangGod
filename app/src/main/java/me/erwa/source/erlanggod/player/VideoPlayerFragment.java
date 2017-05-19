@@ -18,10 +18,12 @@ import java.util.HashMap;
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.CellularWarning;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CloseButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Interaction;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.NetStateMonitor;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
@@ -153,6 +155,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new GesturePanel());
         mediaControllerBoard.addPlugin(new Interaction());
         mediaControllerBoard.addPlugin(new PlayButton());
+        mediaControllerBoard.addPlugin(new CellularWarning());
+        mediaControllerBoard.addPlugin(new NetStateMonitor());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

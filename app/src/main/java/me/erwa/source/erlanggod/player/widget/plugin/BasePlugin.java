@@ -118,14 +118,16 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
 
     }
 
+    @CallSuper
     @Override
-    public void onLifePause() {
-
+    public void onLifePause(Context context) {
+        this.mContext = context;
     }
 
+    @CallSuper
     @Override
-    public void onLifeResume() {
-
+    public void onLifeResume(Context context) {
+        this.mContext = context;
     }
 
     @Override
@@ -138,6 +140,8 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_OPERATION_BAR = 300;
     protected static final int BASE_ACTION_VIDEO_INFO = 400;
     protected static final int BASE_ACTION_GESTURE_PANEL = 500;
+    protected static final int BASE_ACTION_CLOSE_BUTTON = 600;
+    protected static final int BASE_ACTION_NET_STATE_MONITOR = 700;
 
     /**
      * 发出的动作命令

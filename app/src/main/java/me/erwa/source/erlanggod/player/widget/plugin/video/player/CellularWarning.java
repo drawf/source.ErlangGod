@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog;
 
 import com.pili.pldroid.player.PLMediaPlayer;
 
-import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.NetUtils;
 
 /**
@@ -32,7 +31,6 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
     @Override
     public void onPreparedListener(PLMediaPlayer plMediaPlayer) {
         super.onPreparedListener(plMediaPlayer);
-        LogUtils.trace("on prepared");
         working();
     }
 
@@ -64,6 +62,6 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
                 .show();
     }
 
-    // TODO: drawf 2017/5/22 process user preferences 
+    // TODO: drawf 2017/5/22 process user preferences
 
 }

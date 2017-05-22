@@ -12,6 +12,7 @@ import me.erwa.source.erlanggod.R;
  * ------------------------------
  */
 
+// TODO: drawf 2017/5/22 misplaying 字段的管理
 public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
     public static final int ACTION_ON_PLAY = BASE_ACTION_PLAY_BUTTON;

@@ -1,6 +1,7 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import me.erwa.source.erlanggod.player.OptionsManager;
+import me.erwa.source.erlanggod.utils.LogUtils;
 
 /**
  * Created by drawf on 2017/5/22.
@@ -16,7 +17,10 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
         mBoard.mVideoView.setVideoPath(s);
         mBoard.mVideoView.seekTo(12000);
+        LogUtils.trace("do init");
     }
+
+    // TODO: drawf 2017/5/22 need fix
 
     @Override
     public void onAction(int action) {
@@ -24,6 +28,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         switch (action) {
             case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
                 long position = mPlayer.getCurrentPosition();
+
+                mBoard.mVideoView.setAVOptions(OptionsManager.newInstance().setAutoStart(mBoard.mIsPlaying).build());
                 String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
                 mBoard.mVideoView.setVideoPath(s);
                 mBoard.mVideoView.seekTo(position);

@@ -21,13 +21,14 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CellularWarning;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CloseButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Interaction;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.NetStateMonitor;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayerController;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
@@ -61,13 +62,15 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     }
 
     private void init() {
-        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
-        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
+//        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
+        mBinding.videoView.setVideoPath("");
+//        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8");
+//        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
 //        mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
         mediaControllerBoard = new MediaControllerBoard(getActivity(), R.layout.media_controller_board);
         mBinding.videoView.setMediaController(mediaControllerBoard);
 
-        mBinding.videoView.seekTo(128000);
+//        mBinding.videoView.seekTo(128000);
 
 
         String info = "{\n" +
@@ -133,7 +136,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
                 "            \"mobile\": {\n" +
                 "                \"mp4_middle\": \"http://private.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.mp4\",\n" +
                 "                \"hls_low\": \"https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8\",\n" +
-                "                \"hls_middle\": \"https://hls.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.m3u8\",\n" +
+                "                \"hls_middle\": \"https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8\",\n" +
                 "                \"mp4_middle_md5\": \"d4d09be61e3e172125ffd31501e76660\"\n" +
                 "            },\n" +
                 "            \"pc\": {\n" +
@@ -145,6 +148,9 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
                 "            }\n" +
                 "        }\n" +
                 "    }";
+
+//        https://hls.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.m3u8
+
 
         mediaControllerBoard.addPlugin(new VideoTitle());
         mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
@@ -160,11 +166,12 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new CellularWarning());
         mediaControllerBoard.addPlugin(new NetStateMonitor());
         mediaControllerBoard.addPlugin(new QualityMode());
+        mediaControllerBoard.addPlugin(new PlayerController());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
 
-        mBinding.videoView.getVideoBitrate();
+//        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8");
     }
 
     @Override

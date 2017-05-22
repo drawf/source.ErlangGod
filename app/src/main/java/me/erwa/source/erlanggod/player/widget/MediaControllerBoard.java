@@ -123,26 +123,29 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
     @Override
     public void setAnchorView(View view) {
         this.mAnchor = (ViewGroup) view;
-        this.mVideoView = (PLVideoView) mAnchor.findViewById(R.id.video_view);
+        if (this.mVideoView == null) {
 
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        if (this.getParent() != null) {
-            ViewGroup parent = (ViewGroup) this.getParent();
-            parent.removeView(this);
-        }
-        this.mAnchor.addView(this, layoutParams);
+            this.mVideoView = (PLVideoView) mAnchor.findViewById(R.id.video_view);
 
-        if (!mInitFromXML) {
-            removeAllViews();
-            mBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), mLayoutId, null, false);
-            addView(mBinding.getRoot(), layoutParams);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            if (this.getParent() != null) {
+                ViewGroup parent = (ViewGroup) this.getParent();
+                parent.removeView(this);
+            }
+            this.mAnchor.addView(this, layoutParams);
 
-            initPlugins();
-            initListener();
+            if (!mInitFromXML) {
+                removeAllViews();
+                mBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), mLayoutId, null, false);
+                addView(mBinding.getRoot(), layoutParams);
 
-        } else {
-            throw new RuntimeException("I don't support init from XML!");
+                initPlugins();
+                initListener();
+
+            } else {
+                throw new RuntimeException("I don't support init from XML!");
+            }
         }
     }
 

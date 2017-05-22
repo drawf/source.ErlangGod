@@ -16,6 +16,7 @@ public class PlayButton extends BaseVideoPlayerPlugin implements View.OnClickLis
 
     public static final int ACTION_ON_PLAY = BASE_ACTION_PLAY_BUTTON;
     public static final int ACTION_ON_PAUSE = BASE_ACTION_PLAY_BUTTON + 1;
+
     public static final int ACTION_DO_PLAY = BASE_ACTION_PLAY_BUTTON + 10;
     public static final int ACTION_DO_PAUSE = BASE_ACTION_PLAY_BUTTON + 11;
     public static final int ACTION_DO_TOGGLE_PLAY_PAUSE = BASE_ACTION_PLAY_BUTTON + 12;

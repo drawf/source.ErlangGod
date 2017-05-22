@@ -28,12 +28,14 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
 
 /**
  * Created by drawf on 2017/3/22.
  * ------------------------------
+ * 主播放器
  */
 
 public class VideoPlayerFragment extends Fragment implements View.OnClickListener {
@@ -82,7 +84,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
                 "        \"sections\": [],\n" +
                 "        \"interactions\": [\n" +
                 "            {\n" +
-                "                \"jump\": 0,\n" +
+                "                \"jump\": 138.477,\n" +
                 "                \"time\": 133.477,\n" +
                 "                \"_id\": \"57ff2f56ac0d19594b4c7c49\",\n" +
                 "                \"choices\": [\n" +
@@ -157,6 +159,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new PlayButton());
         mediaControllerBoard.addPlugin(new CellularWarning());
         mediaControllerBoard.addPlugin(new NetStateMonitor());
+        mediaControllerBoard.addPlugin(new QualityMode());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

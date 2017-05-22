@@ -142,6 +142,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_GESTURE_PANEL = 500;
     protected static final int BASE_ACTION_CLOSE_BUTTON = 600;
     protected static final int BASE_ACTION_NET_STATE_MONITOR = 700;
+    protected static final int BASE_ACTION_QUALITY_MODE = 800;
 
     /**
      * 发出的动作命令

@@ -39,7 +39,7 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
     private boolean shouldWarning() {
         //读取用户设置偏好 UserPreferences.getBoolean(UserPreferences.KEY_CELLULAR_VIDEO_OPERATION_ENABLE);
         //当前是否为非WIFI状态
-        return NetUtils.getType().equals(NetUtils.TYPE_NONE);
+        return !NetUtils.getType().equals(NetUtils.TYPE_WIFI);
     }
 
     private void working() {
@@ -63,5 +63,7 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
                 })
                 .show();
     }
+
+    // TODO: drawf 2017/5/22 process user preferences 
 
 }

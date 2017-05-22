@@ -7,6 +7,7 @@ import me.erwa.source.erlanggod.utils.Mapper;
 /**
  * Created by drawf on 2017/5/17.
  * ------------------------------
+ * 视频数据
  */
 
 public class VideoData extends BaseVideoPlayerPlugin {

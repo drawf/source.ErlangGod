@@ -71,7 +71,7 @@ public class LoadingPanel extends BaseVideoPlayerPlugin {
             result /= 1024;
             unit = "MB/s";
         }
-        return new DecimalFormat("#0.00").format(result) + unit;
+        return new DecimalFormat("#0").format(result) + unit;
     }
 
 }

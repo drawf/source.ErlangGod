@@ -14,6 +14,7 @@ import me.erwa.source.erlanggod.utils.NetUtils;
 /**
  * Created by drawf on 2017/5/22.
  * ------------------------------
+ * 清晰度切换
  */
 
 public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickListener {

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 /**
  * Created by drawf on 2017/5/19.
  * ------------------------------
+ * 网络状态监听
  */
 
 public class NetStateMonitor extends BaseVideoPlayerPlugin {

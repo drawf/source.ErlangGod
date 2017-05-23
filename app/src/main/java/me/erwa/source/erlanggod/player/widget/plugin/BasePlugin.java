@@ -3,6 +3,7 @@ package me.erwa.source.erlanggod.player.widget.plugin;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 
 import com.pili.pldroid.player.IMediaController;
@@ -22,6 +23,17 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected Context mContext;
     protected IMediaController.MediaPlayerControl mPlayer;
     protected B mBinding;
+
+    private int weight = 0;//权重越高执行优先级越低
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        return this.weight - ((BasePlugin) o).weight;
+    }
 
     @CallSuper
     @Override
@@ -133,5 +145,6 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     public Object replyFetchData(int action) {
         return null;
     }
+
 
 }

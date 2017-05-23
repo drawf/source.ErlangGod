@@ -19,9 +19,11 @@ import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.erwa.source.erlanggod.R;
+import me.erwa.source.erlanggod.player.widget.plugin.BasePlugin;
 import me.erwa.source.erlanggod.utils.LogUtils;
 import me.erwa.source.erlanggod.utils.ToastUtils;
 
@@ -202,7 +204,7 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         triggerPluginInit();
     }
 
-    public interface IPlugin {
+    public interface IPlugin extends Comparable {
         void init(MediaControllerBoard board);
 
         void doInit();
@@ -238,6 +240,12 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
      */
     public void addPlugin(IPlugin plugin) {
         mPlugins.add(plugin);
+        Collections.sort(mPlugins);
+    }
+
+    public void addPlugin(IPlugin plugin, int weight) {
+        ((BasePlugin) plugin).setWeight(weight);
+        addPlugin(plugin);
     }
 
     private void triggerPluginInit() {

@@ -153,6 +153,8 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 //        https://hls.media.yangcong345.com/mobileM/mobileM_586d5aa4065b7e9d714294fc.m3u8
 
 
+        mediaControllerBoard.addPlugin(new PlayerController(), 1);
+
         mediaControllerBoard.addPlugin(new VideoTitle());
         mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
 
@@ -168,7 +170,6 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new NetStateMonitor());
         mediaControllerBoard.addPlugin(new QualityMode());
         mediaControllerBoard.addPlugin(new ErrorHandler());
-        mediaControllerBoard.addPlugin(new PlayerController());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

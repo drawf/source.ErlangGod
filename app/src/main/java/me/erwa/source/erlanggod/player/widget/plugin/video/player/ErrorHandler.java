@@ -66,7 +66,7 @@ public class ErrorHandler extends BaseVideoPlayerPlugin {
                 break;
             case PLMediaPlayer.ERROR_CODE_IO_ERROR:
                 LogUtils.e("Network IO Error !");
-                tip = "网络I/O错误";
+                tip = "网络IO错误，请先检查网络";
                 retry = true;
                 break;
             case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:

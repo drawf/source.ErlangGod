@@ -18,13 +18,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     @Override
     public void doInit() {
         super.doInit();
-
         mBoard.mVideoView.setAVOptions(OptionsManager.newInstance().build());
-        String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
-        mBoard.mVideoView.stopPlayback();
-        mBoard.mVideoView.setVideoPath(s);
-        mBoard.mVideoView.seekTo(12000);
-
+        doPlay(12000);
     }
 
     private boolean isPaused;
@@ -34,19 +29,13 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         super.onAction(action);
         switch (action) {
             case ACTION_DO_RETRY_PLAY:
-                String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
-                mBoard.mVideoView.stopPlayback();
-                mBoard.mVideoView.setVideoPath(s);
+                doPlay(0);
                 break;
             case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
                 isPaused = !mBoard.mIsPlaying;
 
-                long position1 = mPlayer.getCurrentPosition();
-                String s1 = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
-                mBoard.mVideoView.stopPlayback();
-                mBoard.mVideoView.setVideoPath(s1);
-                mBoard.mVideoView.seekTo(position1);
-
+                long pos = mPlayer.getCurrentPosition();
+                doPlay(pos);
                 break;
         }
     }
@@ -62,6 +51,18 @@ public class PlayerController extends BaseVideoPlayerPlugin {
                     doAction(PlayButton.ACTION_DO_PAUSE);
                 }
             }, 600);
+        }
+    }
+
+    private String fetchUrl() {
+        return (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
+    }
+
+    private void doPlay(long seek) {
+        mBoard.mVideoView.stopPlayback();
+        mBoard.mVideoView.setVideoPath(fetchUrl());
+        if (seek > 0) {
+            mBoard.mVideoView.seekTo(seek);
         }
     }
 }

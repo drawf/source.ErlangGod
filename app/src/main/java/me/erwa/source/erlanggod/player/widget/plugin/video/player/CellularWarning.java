@@ -1,10 +1,14 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 
 import com.pili.pldroid.player.PLMediaPlayer;
 
+import me.erwa.source.erlanggod.R;
+import me.erwa.source.erlanggod.databinding.MediaControllerCellularWarningBinding;
 import me.erwa.source.erlanggod.utils.NetUtils;
 
 /**
@@ -36,29 +40,37 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
 
     private boolean shouldWarning() {
         //读取用户设置偏好 UserPreferences.getBoolean(UserPreferences.KEY_CELLULAR_VIDEO_OPERATION_ENABLE);
-        //当前是否为非WIFI状态
-        return !NetUtils.getType().equals(NetUtils.TYPE_WIFI);
+        //当前是否为蜂窝网络状态
+        return NetUtils.getType().equals(NetUtils.TYPE_CELLULAR);
     }
 
     private void working() {
         if (!shouldWarning()) return;
 
         doAction(PlayButton.ACTION_DO_PAUSE);
+
+        final MediaControllerCellularWarningBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext),
+                R.layout.media_controller_cellular_warning, null, false);
+
         new AlertDialog.Builder(mContext)
                 .setTitle("网络提示")
-                .setMessage("当前使用的2G/3G/4G网络，是否继续播放")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setIcon(R.mipmap.ic_launcher)
+                .setView(binding.getRoot())
+                .setPositiveButton("播放", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         doAction(PlayButton.ACTION_DO_PLAY);
+                        //设置用户偏好
+//                        binding.cbAuth.isChecked()
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton("退出", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         doAction(CloseButton.ACTION_DO_CLOSE);
                     }
                 })
+                .setCancelable(false)
                 .show();
     }
 

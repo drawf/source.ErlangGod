@@ -63,7 +63,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
     private void init() {
 //        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
-        mBinding.videoView.setVideoPath("");
+        mBinding.videoView.setVideoPath("");//need to call this to init plugins
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8");
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
 //        mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");

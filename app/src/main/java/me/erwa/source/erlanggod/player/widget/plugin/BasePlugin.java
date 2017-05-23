@@ -46,61 +46,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     @CallSuper
     @Override
     public void onErrorListener(PLMediaPlayer plMediaPlayer, int errorCode) {
-        boolean isNeedReconnect = false;
-        LogUtils.e("Error happened, errorCode = " + errorCode);
-        switch (errorCode) {
-            case PLMediaPlayer.ERROR_CODE_INVALID_URI:
-                LogUtils.e("Invalid URL !");
-                break;
-            case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
-                LogUtils.e("404 resource not found !");
-                break;
-            case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
-                LogUtils.e("Connection refused !");
-                break;
-            case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
-                LogUtils.e("Connection timeout !");
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
-                LogUtils.e("Empty playlist !");
-                break;
-            case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
-                LogUtils.e("Stream disconnected !");
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.ERROR_CODE_IO_ERROR:
-                LogUtils.e("Network IO Error !");
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
-                LogUtils.e("Unauthorized Error !");
-                break;
-            case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
-                LogUtils.e("Prepare timeout !");
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
-                LogUtils.e("Read frame timeout !");
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
-//                        setOptions(AVOptions.MEDIA_CODEC_SW_DECODE);
-                isNeedReconnect = true;
-                break;
-            case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
-                LogUtils.e("unknown error !");
-                break;
-            default:
-                LogUtils.e("unknown error !");
-                break;
-        }
-        // Todo pls handle the error status here, reconnect or call finish()
-        if (isNeedReconnect) {
-//                    sendReconnectMessage();
-        } else {
-//                    finish();
-        }
+
     }
 
     @Override
@@ -143,6 +89,8 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_CLOSE_BUTTON = 600;
     protected static final int BASE_ACTION_NET_STATE_MONITOR = 700;
     protected static final int BASE_ACTION_QUALITY_MODE = 800;
+    protected static final int BASE_ACTION_PLAYER_CONTROLLER = 900;
+    protected static final int BASE_ACTION_ERROR_HANDLER = 1000;
 
     /**
      * 发出的动作命令

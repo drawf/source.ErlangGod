@@ -7,6 +7,12 @@
         android:layout_height="match_parent">
 
         <include
+            android:id="@+id/include_error_page"
+            layout="@layout/media_controller_error_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include
             android:id="@+id/include_top_bar"
             layout="@layout/media_controller_top_bar"/>
 
@@ -36,10 +42,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-
-        <!--<TextView-->
-        <!--android:id="@+id/ib_back"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"/>-->
     </RelativeLayout>
 </layout>

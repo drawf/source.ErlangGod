@@ -13,29 +13,40 @@ import me.erwa.source.erlanggod.player.OptionsManager;
 
 public class PlayerController extends BaseVideoPlayerPlugin {
 
+    public static final int ACTION_DO_RETRY_PLAY = BASE_ACTION_PLAYER_CONTROLLER + 20;
+
     @Override
     public void doInit() {
         super.doInit();
+
         mBoard.mVideoView.setAVOptions(OptionsManager.newInstance().build());
         String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(s);
         mBoard.mVideoView.seekTo(12000);
+
     }
 
     private boolean isPaused;
+
     @Override
     public void onAction(int action) {
         super.onAction(action);
         switch (action) {
-            case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
-                isPaused = !mBoard.mIsPlaying;
-
-                long position = mPlayer.getCurrentPosition();
+            case ACTION_DO_RETRY_PLAY:
                 String s = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
                 mBoard.mVideoView.stopPlayback();
                 mBoard.mVideoView.setVideoPath(s);
-                mBoard.mVideoView.seekTo(position);
+                break;
+            case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
+                isPaused = !mBoard.mIsPlaying;
+
+                long position1 = mPlayer.getCurrentPosition();
+                String s1 = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
+                mBoard.mVideoView.stopPlayback();
+                mBoard.mVideoView.setVideoPath(s1);
+                mBoard.mVideoView.seekTo(position1);
+
                 break;
         }
     }
@@ -50,7 +61,7 @@ public class PlayerController extends BaseVideoPlayerPlugin {
                 public void run() {
                     doAction(PlayButton.ACTION_DO_PAUSE);
                 }
-            },600);
+            }, 600);
         }
     }
 }

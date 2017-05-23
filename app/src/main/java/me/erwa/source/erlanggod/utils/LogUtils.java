@@ -18,7 +18,7 @@ import me.erwa.source.erlanggod.BuildConfig;
 public class LogUtils {
     private static final String TAG = "erlanggod";
     private static final boolean ENABLED = BuildConfig.DEBUG;
-    private static final boolean STRICT = true;
+    private static final boolean STRICT = false;
 
     private static final int MESSAGE_MAX_LEN = 3600;
     private static final String SEPARATOR = " ⇢ ";

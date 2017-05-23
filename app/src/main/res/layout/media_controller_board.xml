@@ -42,5 +42,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <include
+            android:id="@+id/include_jump_over"
+            layout="@layout/media_controller_jump_over_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </RelativeLayout>
 </layout>

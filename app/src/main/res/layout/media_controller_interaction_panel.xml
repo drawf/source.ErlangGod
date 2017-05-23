@@ -20,9 +20,10 @@
                 android:layout_height="36dp"
                 android:background="@drawable/media_controller_interaction_choice_bg"
                 android:gravity="center"
+                android:minWidth="0dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="想好了，继续"
+                android:text="A"
                 android:textColor="@color/yc_gray5_primary"
                 android:textSize="14dp"/>
 

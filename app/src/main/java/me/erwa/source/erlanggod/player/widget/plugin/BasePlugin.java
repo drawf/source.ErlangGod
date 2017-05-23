@@ -103,6 +103,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_QUALITY_MODE = 800;
     protected static final int BASE_ACTION_PLAYER_CONTROLLER = 900;
     protected static final int BASE_ACTION_ERROR_HANDLER = 1000;
+    protected static final int BASE_ACTION_JUMP_OVER_BUTTON = 1100;
 
     /**
      * 发出的动作命令

@@ -16,6 +16,8 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
 public class PlayerController extends BaseVideoPlayerPlugin {
 
     public static final int ACTION_DO_RETRY_PLAY = BASE_ACTION_PLAYER_CONTROLLER + 20;
+    public static final int ACTION_DO_JUMP_OVER = BASE_ACTION_PLAYER_CONTROLLER + 21;
+
     public static final int CURRENT_PLAY_PRE = 0;
     public static final int CURRENT_PLAY_NORMAL = 1;
     public static final int CURRENT_PLAY_END = 2;
@@ -28,7 +30,9 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     public void doInit() {
         super.doInit();
         mBoard.mVideoView.setAVOptions(OptionsManager.newInstance().build());
-        doPlay(12000);
+        //判断是否播片头
+        doPlayPre();
+//        doPlay(12000);
     }
 
 
@@ -38,6 +42,9 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         switch (action) {
             case ACTION_DO_RETRY_PLAY:
                 doPlay(0);
+                break;
+            case ACTION_DO_JUMP_OVER:
+                onCompletionListener(null);
                 break;
             case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
                 isPaused = !mBoard.mIsPlaying;
@@ -69,6 +76,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
 
         switch (currentPlay) {
             case CURRENT_PLAY_PRE:
+                doAction(JumpOverButton.ACTION_DO_DISABLED);
+                doPlay(0);
                 break;
             case CURRENT_PLAY_NORMAL:
                 ToastUtils.show("播放完毕");
@@ -95,11 +104,22 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     }
 
     private void doPlayEnd() {
+        doAction(JumpOverButton.ACTION_DO_ENABLED);
+
         currentPlay = CURRENT_PLAY_END;
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
 
 //        doAction(GesturePanel.ACTION_DO_DISABLED);
+    }
+
+    private void doPlayPre() {
+        doAction(JumpOverButton.ACTION_DO_ENABLED);
+
+        currentPlay = CURRENT_PLAY_PRE;
+        String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
+        mBoard.mVideoView.stopPlayback();
+        mBoard.mVideoView.setVideoPath(url);
     }
 }

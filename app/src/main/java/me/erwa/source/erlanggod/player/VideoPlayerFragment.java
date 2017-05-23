@@ -24,6 +24,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ErrorHandler;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Interaction;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.JumpOverButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.LoadingPanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.NetStateMonitor;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
@@ -170,6 +171,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new NetStateMonitor());
         mediaControllerBoard.addPlugin(new QualityMode());
         mediaControllerBoard.addPlugin(new ErrorHandler());
+        mediaControllerBoard.addPlugin(new JumpOverButton());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

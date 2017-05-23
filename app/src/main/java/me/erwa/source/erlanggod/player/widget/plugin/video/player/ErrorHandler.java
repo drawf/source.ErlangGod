@@ -25,6 +25,7 @@ public class ErrorHandler extends BaseVideoPlayerPlugin {
     @Override
     public void onCompletionListener(PLMediaPlayer plMediaPlayer) {
         super.onCompletionListener(plMediaPlayer);
+        //当前无网络时，滑动进度条会触发onCompletionListener
         if (mPlayer.getCurrentPosition() + 9000 < mPlayer.getDuration() && !NetUtils.isConnected()) {
             onErrorListener(null, PLMediaPlayer.ERROR_CODE_IO_ERROR);
         }

@@ -24,8 +24,6 @@ import java.util.List;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.player.widget.plugin.BasePlugin;
-import me.erwa.source.erlanggod.utils.LogUtils;
-import me.erwa.source.erlanggod.utils.ToastUtils;
 
 /**
  * Created by drawf on 2017/3/24.
@@ -179,9 +177,6 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
             @Override
             public void onCompletion(PLMediaPlayer plMediaPlayer) {
                 triggerPluginOnCompletionListener(plMediaPlayer);
-
-                LogUtils.trace("onCompletion:" + mVideoView.getCurrentPosition() + "==>" + mVideoView.getDuration());
-                ToastUtils.show("播放完毕");
             }
         });
 

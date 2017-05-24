@@ -19,7 +19,9 @@ import me.erwa.source.erlanggod.utils.NetUtils;
 
 public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
-    public static final int ACTION_ON_MODIFY_QUALITY_MODE = BASE_ACTION_QUALITY_MODE + 10;
+    public static final int ACTION_ON_SWITCH_QUALITY_MODE = BASE_ACTION_QUALITY_MODE + 10;
+    public static final int ACTION_DO_SWITCH_MODE_LOW = BASE_ACTION_QUALITY_MODE + 20;
+    public static final int ACTION_DO_SWITCH_MODE_MIDDLE = BASE_ACTION_QUALITY_MODE + 21;
     public static final int ACTION_FETCH_QUALITY_MODE = BASE_ACTION_QUALITY_MODE + 30;
 
     @Override
@@ -67,19 +69,11 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
     public void onClick(View view) {
         int id = view.getId();
         if (id == qualityBinding.tvLow.getId()) {
-            if (!qualityMode.equals("low")) {
-                mBinding.includeTopBar.tvQuality.setText("流畅");
-                qualityMode = "low";
-                pop.dismiss();
-                doAction(ACTION_ON_MODIFY_QUALITY_MODE);
-            }
+            doSwitchLow();
+            pop.dismiss();
         } else if (id == qualityBinding.tvMiddle.getId()) {
-            if (!qualityMode.equals("middle")) {
-                mBinding.includeTopBar.tvQuality.setText("高清");
-                qualityMode = "middle";
-                pop.dismiss();
-                doAction(ACTION_ON_MODIFY_QUALITY_MODE);
-            }
+            doSwitchMiddle();
+            pop.dismiss();
         } else if (id == mBinding.includeTopBar.tvQuality.getId()) {
             showPop(view);
         }
@@ -102,6 +96,28 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
             case OperationBar.ACTION_ON_HIDE:
                 pop.dismiss();
                 break;
+            case ACTION_DO_SWITCH_MODE_LOW:
+                doSwitchLow();
+                break;
+            case ACTION_DO_SWITCH_MODE_MIDDLE:
+                doSwitchMiddle();
+                break;
+        }
+    }
+
+    private void doSwitchLow() {
+        if (!qualityMode.equals("low")) {
+            mBinding.includeTopBar.tvQuality.setText("流畅");
+            qualityMode = "low";
+            doAction(ACTION_ON_SWITCH_QUALITY_MODE);
+        }
+    }
+
+    private void doSwitchMiddle() {
+        if (!qualityMode.equals("middle")) {
+            mBinding.includeTopBar.tvQuality.setText("高清");
+            qualityMode = "middle";
+            doAction(ACTION_ON_SWITCH_QUALITY_MODE);
         }
     }
 }

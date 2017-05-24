@@ -18,6 +18,7 @@ import java.util.HashMap;
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.FragmentPlayerBoardBinding;
 import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.CatonTipsBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CellularWarning;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CloseButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
@@ -172,6 +173,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new QualityMode());
         mediaControllerBoard.addPlugin(new ErrorHandler());
         mediaControllerBoard.addPlugin(new JumpOverButton());
+        mediaControllerBoard.addPlugin(new CatonTipsBar());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

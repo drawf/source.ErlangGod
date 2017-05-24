@@ -48,5 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <include
+            android:id="@+id/include_caton_tips"
+            layout="@layout/media_controller_caton_tips_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </RelativeLayout>
 </layout>

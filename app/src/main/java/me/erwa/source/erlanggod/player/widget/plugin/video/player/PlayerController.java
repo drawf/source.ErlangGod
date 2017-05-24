@@ -32,7 +32,7 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         mBoard.mVideoView.setAVOptions(OptionsManager.newInstance().build());
         //判断是否播片头
         doPlayPre();
-//        doPlay(12000);
+//        doPlayNormal(12000);
     }
 
 
@@ -41,16 +41,16 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         super.onAction(action);
         switch (action) {
             case ACTION_DO_RETRY_PLAY:
-                doPlay(0);
+                doPlayNormal(0);
                 break;
             case ACTION_DO_JUMP_OVER:
                 onCompletionListener(null);
                 break;
-            case QualityMode.ACTION_ON_MODIFY_QUALITY_MODE:
+            case QualityMode.ACTION_ON_SWITCH_QUALITY_MODE:
                 isPaused = !mBoard.mIsPlaying;
 
                 long pos = mPlayer.getCurrentPosition();
-                doPlay(pos);
+                doPlayNormal(pos);
                 break;
         }
     }
@@ -76,8 +76,7 @@ public class PlayerController extends BaseVideoPlayerPlugin {
 
         switch (currentPlay) {
             case CURRENT_PLAY_PRE:
-                doAction(JumpOverButton.ACTION_DO_DISABLED);
-                doPlay(0);
+                doPlayNormal(0);
                 break;
             case CURRENT_PLAY_NORMAL:
                 ToastUtils.show("播放完毕");
@@ -93,7 +92,11 @@ public class PlayerController extends BaseVideoPlayerPlugin {
 
     }
 
-    private void doPlay(long seek) {
+    private void doPlayNormal(long seek) {
+        doAction(OperationBar.ACTION_DO_ENABLED);
+        doAction(GesturePanel.ACTION_DO_ENABLED);
+        doAction(JumpOverButton.ACTION_DO_DISABLED);
+
         currentPlay = CURRENT_PLAY_NORMAL;
         String url = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
         mBoard.mVideoView.stopPlayback();
@@ -104,6 +107,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     }
 
     private void doPlayEnd() {
+        doAction(OperationBar.ACTION_DO_DISABLED);
+        doAction(GesturePanel.ACTION_DO_DISABLED);
         doAction(JumpOverButton.ACTION_DO_ENABLED);
 
         currentPlay = CURRENT_PLAY_END;
@@ -115,6 +120,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     }
 
     private void doPlayPre() {
+        doAction(OperationBar.ACTION_DO_DISABLED);
+        doAction(GesturePanel.ACTION_DO_DISABLED);
         doAction(JumpOverButton.ACTION_DO_ENABLED);
 
         currentPlay = CURRENT_PLAY_PRE;

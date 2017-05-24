@@ -36,6 +36,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.VipTipsBar;
 
 /**
  * Created by drawf on 2017/3/22.
@@ -176,6 +177,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new JumpOverButton());
         mediaControllerBoard.addPlugin(new CatonTipsBar());
         mediaControllerBoard.addPlugin(new PracticeTipsBar());
+        mediaControllerBoard.addPlugin(new VipTipsBar());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

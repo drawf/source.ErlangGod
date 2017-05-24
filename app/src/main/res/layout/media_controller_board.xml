@@ -60,5 +60,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <include
+            android:id="@+id/include_vip_tips"
+            layout="@layout/media_controller_vip_tips_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </RelativeLayout>
 </layout>

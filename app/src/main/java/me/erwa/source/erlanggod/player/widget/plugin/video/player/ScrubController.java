@@ -56,7 +56,8 @@ public class ScrubController extends BaseVideoPlayerPlugin {
 
         //如果播放本地视频，做解密操作
 
-        doAction(DownloadButton.ACTION_DO_DISABLED);
+//        doAction(DownloadButton.ACTION_DO_DISABLED);
+//        doAction(QualityMode.ACTION_DO_DISABLED);
 
         doAction(ACTION_ON_PROCESS_PRE_FINISHED);
     }

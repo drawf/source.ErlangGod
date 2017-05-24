@@ -74,10 +74,8 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
         int id = view.getId();
         if (id == qualityBinding.tvLow.getId()) {
             doSwitchLow();
-            pop.dismiss();
         } else if (id == qualityBinding.tvMiddle.getId()) {
             doSwitchMiddle();
-            pop.dismiss();
         } else if (id == mBinding.includeTopBar.tvQuality.getId()) {
             showPop(view);
         }
@@ -120,6 +118,7 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
             mBinding.includeTopBar.tvQuality.setText("流畅");
             qualityMode = "low";
             doAction(ACTION_ON_SWITCH_QUALITY_MODE);
+            pop.dismiss();
         }
     }
 
@@ -128,6 +127,7 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
             mBinding.includeTopBar.tvQuality.setText("高清");
             qualityMode = "middle";
             doAction(ACTION_ON_SWITCH_QUALITY_MODE);
+            pop.dismiss();
         }
     }
 

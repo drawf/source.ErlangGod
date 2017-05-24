@@ -20,8 +20,12 @@ import me.erwa.source.erlanggod.utils.NetUtils;
 public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickListener {
 
     public static final int ACTION_ON_SWITCH_QUALITY_MODE = BASE_ACTION_QUALITY_MODE + 10;
+
     public static final int ACTION_DO_SWITCH_MODE_LOW = BASE_ACTION_QUALITY_MODE + 20;
     public static final int ACTION_DO_SWITCH_MODE_MIDDLE = BASE_ACTION_QUALITY_MODE + 21;
+    public static final int ACTION_DO_ENABLED = BASE_ACTION_QUALITY_MODE + 22;
+    public static final int ACTION_DO_DISABLED = BASE_ACTION_QUALITY_MODE + 23;
+
     public static final int ACTION_FETCH_QUALITY_MODE = BASE_ACTION_QUALITY_MODE + 30;
 
     @Override
@@ -102,6 +106,12 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
             case ACTION_DO_SWITCH_MODE_MIDDLE:
                 doSwitchMiddle();
                 break;
+            case ACTION_DO_ENABLED:
+                doEnabled();
+                break;
+            case ACTION_DO_DISABLED:
+                doDisabled();
+                break;
         }
     }
 
@@ -119,5 +129,13 @@ public class QualityMode extends BaseVideoPlayerPlugin implements View.OnClickLi
             qualityMode = "middle";
             doAction(ACTION_ON_SWITCH_QUALITY_MODE);
         }
+    }
+
+    private void doEnabled() {
+        mBinding.includeTopBar.tvQuality.setVisibility(View.VISIBLE);
+    }
+
+    private void doDisabled() {
+        mBinding.includeTopBar.tvQuality.setVisibility(View.GONE);
     }
 }

@@ -9,7 +9,7 @@ import com.pili.pldroid.player.PLMediaPlayer;
 /**
  * Created by drawf on 2017/5/24.
  * ------------------------------
- * 练习题提示
+ * 当自动使用体验券播放时提示
  */
 
 public class VipTipsBar extends BaseVideoPlayerPlugin {

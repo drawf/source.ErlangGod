@@ -11,12 +11,28 @@ import me.erwa.source.erlanggod.utils.ToastUtils;
  * ------------------------------
  */
 
-public class Download extends BaseVideoPlayerPlugin implements View.OnClickListener {
+public class DownloadButton extends BaseVideoPlayerPlugin implements View.OnClickListener {
+
+    public static final int ACTION_DO_ENABLED = BASE_ACTION_DOWNLOAD_BUTTON + 22;
+    public static final int ACTION_DO_DISABLED = BASE_ACTION_DOWNLOAD_BUTTON + 23;
 
     @Override
     public void doInit() {
         super.doInit();
         mBinding.includeTopBar.ibDownload.setOnClickListener(this);
+    }
+
+    @Override
+    public void onAction(int action) {
+        super.onAction(action);
+        switch (action) {
+            case ACTION_DO_ENABLED:
+                doEnabled();
+                break;
+            case ACTION_DO_DISABLED:
+                doDisabled();
+                break;
+        }
     }
 
     @Override
@@ -39,5 +55,13 @@ public class Download extends BaseVideoPlayerPlugin implements View.OnClickListe
                 })
                 .setNegativeButton("取消", null)
                 .show();
+    }
+
+    private void doEnabled() {
+        mBinding.includeTopBar.ibDownload.setVisibility(View.VISIBLE);
+    }
+
+    private void doDisabled() {
+        mBinding.includeTopBar.ibDownload.setVisibility(View.GONE);
     }
 }

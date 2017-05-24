@@ -21,7 +21,7 @@ import me.erwa.source.erlanggod.player.widget.MediaControllerBoard;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CatonTipsBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CellularWarning;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.CloseButton;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.Download;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.DownloadButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ErrorHandler;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.GesturePanel;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.Interaction;
@@ -34,6 +34,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayerControll
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PracticeTipsBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.ScrubController;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VipTipsBar;
@@ -166,7 +167,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new OperationBar());
         mediaControllerBoard.addPlugin(new ProgressBar());
         mediaControllerBoard.addPlugin(new LoadingPanel());
-        mediaControllerBoard.addPlugin(new Download());
+        mediaControllerBoard.addPlugin(new DownloadButton());
         mediaControllerBoard.addPlugin(new GesturePanel());
         mediaControllerBoard.addPlugin(new Interaction());
         mediaControllerBoard.addPlugin(new PlayButton());
@@ -178,6 +179,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new CatonTipsBar());
         mediaControllerBoard.addPlugin(new PracticeTipsBar());
         mediaControllerBoard.addPlugin(new VipTipsBar());
+        mediaControllerBoard.addPlugin(new ScrubController());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

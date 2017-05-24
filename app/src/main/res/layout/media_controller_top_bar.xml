@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:src="@drawable/ic_arrow_back_white"/>
+            android:src="@drawable/ic_media_controller_arrow_back"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -30,36 +30,37 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
 
-        <ImageButton
-            android:id="@+id/ib_download"
-            android:layout_width="56dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_download_white"/>
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/ib_share"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/ib_download"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_share_white"/>
+            <TextView
+                android:id="@+id/tv_quality"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="高清"
+                android:textColor="@color/selector_white"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/tv_quality"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/ib_share"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="高清"
-            android:textColor="@color/selector_white"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
 
+            <ImageButton
+                android:id="@+id/ib_share"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_media_controller_share"/>
+
+            <ImageButton
+                android:id="@+id/ib_download"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_media_controller_download"/>
+        </LinearLayout>
     </RelativeLayout>
 </layout>

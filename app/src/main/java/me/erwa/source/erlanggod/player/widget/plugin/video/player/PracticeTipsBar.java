@@ -9,7 +9,9 @@ import com.pili.pldroid.player.PLMediaPlayer;
 /**
  * Created by drawf on 2017/5/24.
  * ------------------------------
- * 练习题提示
+ * 当视频后有练习题时提示
+ * 全局只出现一次
+ * 优先级低于VIP引导提示
  */
 
 public class PracticeTipsBar extends BaseVideoPlayerPlugin {

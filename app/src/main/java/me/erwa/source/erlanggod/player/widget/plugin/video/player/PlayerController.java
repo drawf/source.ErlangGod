@@ -54,6 +54,11 @@ public class PlayerController extends BaseVideoPlayerPlugin {
                 long pos = mPlayer.getCurrentPosition();
                 doPlayNormal(pos);
                 break;
+            case ScrubController.ACTION_ON_PROCESS_PRE_FINISHED:
+                onPlayPreFinished();
+                break;
+            case ScrubController.ACTION_ON_PROCESS_END_FINISHED:
+                break;
         }
     }
 
@@ -103,37 +108,48 @@ public class PlayerController extends BaseVideoPlayerPlugin {
 
     }
 
+    private long seekTemp;
+
     private void doPlayNormal(long seek) {
+        seekTemp = seek;
+        currentPlay = CURRENT_PLAY_NORMAL;
+
         doAction(OperationBar.ACTION_DO_ENABLED);
         doAction(GesturePanel.ACTION_DO_ENABLED);
         doAction(JumpOverButton.ACTION_DO_DISABLED);
 
-        currentPlay = CURRENT_PLAY_NORMAL;
-        String url = (String) fetchData(VideoData.ACTION_FETCH_CURRENT_QUALITY_URL);
+        doAction(ScrubController.ACTION_DO_PROCESS_PRE);
+
+    }
+
+    private void onPlayPreFinished() {
+        String url = (String) fetchData(ScrubController.ACTION_FETCH_CURRENT_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
-        if (seek > 0) {
-            mBoard.mVideoView.seekTo(seek);
+        if (seekTemp > 0) {
+            mBoard.mVideoView.seekTo(seekTemp);
         }
     }
 
     private void doPlayEnd() {
+        currentPlay = CURRENT_PLAY_END;
+
         doAction(OperationBar.ACTION_DO_DISABLED);
         doAction(GesturePanel.ACTION_DO_DISABLED);
         doAction(JumpOverButton.ACTION_DO_ENABLED);
 
-        currentPlay = CURRENT_PLAY_END;
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
     }
 
     private void doPlayPre() {
+        currentPlay = CURRENT_PLAY_PRE;
+
         doAction(OperationBar.ACTION_DO_DISABLED);
         doAction(GesturePanel.ACTION_DO_DISABLED);
         doAction(JumpOverButton.ACTION_DO_ENABLED);
 
-        currentPlay = CURRENT_PLAY_PRE;
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);

@@ -18,6 +18,8 @@ public class PlayerController extends BaseVideoPlayerPlugin {
     public static final int ACTION_DO_RETRY_PLAY = BASE_ACTION_PLAYER_CONTROLLER + 20;
     public static final int ACTION_DO_JUMP_OVER = BASE_ACTION_PLAYER_CONTROLLER + 21;
 
+    public static final int ACTION_FETCH_CURRENT_PLAY = BASE_ACTION_PLAYER_CONTROLLER + 30;
+
     public static final int CURRENT_PLAY_PRE = 0;
     public static final int CURRENT_PLAY_NORMAL = 1;
     public static final int CURRENT_PLAY_END = 2;
@@ -53,6 +55,15 @@ public class PlayerController extends BaseVideoPlayerPlugin {
                 doPlayNormal(pos);
                 break;
         }
+    }
+
+    @Override
+    public Object replyFetchData(int action) {
+        switch (action) {
+            case ACTION_FETCH_CURRENT_PLAY:
+                return currentPlay;
+        }
+        return null;
     }
 
     @Override
@@ -115,8 +126,6 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
-
-//        doAction(GesturePanel.ACTION_DO_DISABLED);
     }
 
     private void doPlayPre() {

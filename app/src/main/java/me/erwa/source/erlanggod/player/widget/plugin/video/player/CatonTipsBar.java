@@ -15,13 +15,13 @@ import com.pili.pldroid.player.PLMediaPlayer;
 public class CatonTipsBar extends BaseVideoPlayerPlugin {
 
     private boolean noTips = false;//本次播放不再提示
-    private static final int FLAG_CATON_TIME_OUT = 1;
+    private static final int FLAG_CATON_TIPS_SHOW = 1;
     private static final int CATON_TIME_OUT = 4 * 1000;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case FLAG_CATON_TIME_OUT:
+                case FLAG_CATON_TIPS_SHOW:
                     working();
                     break;
             }
@@ -54,17 +54,19 @@ public class CatonTipsBar extends BaseVideoPlayerPlugin {
         super.onInfoListener(plMediaPlayer, what, extra);
         switch (what) {
             case PLMediaPlayer.MEDIA_INFO_BUFFERING_START:
-                mHandler.sendEmptyMessageDelayed(FLAG_CATON_TIME_OUT, CATON_TIME_OUT);
+                mHandler.removeMessages(FLAG_CATON_TIPS_SHOW);
+                mHandler.sendEmptyMessageDelayed(FLAG_CATON_TIPS_SHOW, CATON_TIME_OUT);
                 break;
             case PLMediaPlayer.MEDIA_INFO_BUFFERING_END:
-                mHandler.removeMessages(FLAG_CATON_TIME_OUT);
+                mHandler.removeMessages(FLAG_CATON_TIPS_SHOW);
                 mBinding.includeCatonTips.container.setVisibility(View.GONE);
                 break;
         }
     }
 
     private void working() {
-        if (!noTips) {
+        int play = (int) fetchData(PlayerController.ACTION_FETCH_CURRENT_PLAY);
+        if (play == PlayerController.CURRENT_PLAY_NORMAL && !noTips) {
             String quality = (String) fetchData(QualityMode.ACTION_FETCH_QUALITY_MODE);
             mBinding.includeCatonTips.container.setVisibility(View.VISIBLE);
             if (quality.equals("low")) {

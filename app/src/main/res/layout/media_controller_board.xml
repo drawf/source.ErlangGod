@@ -54,5 +54,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <include
+            android:id="@+id/include_practice_tips"
+            layout="@layout/media_controller_practice_tips_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </RelativeLayout>
 </layout>

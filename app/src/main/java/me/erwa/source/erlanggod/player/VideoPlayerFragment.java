@@ -31,6 +31,7 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.NetStateMonito
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.OperationBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.PlayerController;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.PracticeTipsBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
@@ -174,6 +175,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new ErrorHandler());
         mediaControllerBoard.addPlugin(new JumpOverButton());
         mediaControllerBoard.addPlugin(new CatonTipsBar());
+        mediaControllerBoard.addPlugin(new PracticeTipsBar());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);

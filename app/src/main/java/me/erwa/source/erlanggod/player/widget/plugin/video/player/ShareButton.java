@@ -1,5 +1,8 @@
 package me.erwa.source.erlanggod.player.widget.plugin.video.player;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.view.View;
 
 import me.erwa.source.erlanggod.utils.ToastUtils;
@@ -38,6 +41,13 @@ public class ShareButton extends BaseVideoPlayerPlugin implements View.OnClickLi
         int id = view.getId();
         if (id == mBinding.includeTopBar.ibShare.getId()) {
             ToastUtils.show("点击了share");
+            if (mContext instanceof Activity) {
+                if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                }
+            }
         }
     }
 

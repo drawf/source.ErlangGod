@@ -1,6 +1,7 @@
 package me.erwa.source.erlanggod.player.widget;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.media.AudioManager;
@@ -99,6 +100,10 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
 
     public void onLifeResume() {
         triggerPluginLifeResume(mContext);
+    }
+
+    public void onLifeConfigurationChanged(Configuration newConfig) {
+        triggerPluginLifeConfigurationChanged(newConfig);
     }
 
     // TODO: drawf 2017/5/16 事件优先级
@@ -219,6 +224,8 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         //最先执行，注意此时还未init
         void onLifeResume(Context context);
 
+        void onLifeConfigurationChanged(Configuration newConfig);
+
         boolean onTouchEvent(MotionEvent event);
 
         void doAction(int action);
@@ -312,6 +319,14 @@ public class MediaControllerBoard extends FrameLayout implements IMediaControlle
         if (!mPlugins.isEmpty()) {
             for (IPlugin p : mPlugins) {
                 p.onLifeResume(context);
+            }
+        }
+    }
+
+    private void triggerPluginLifeConfigurationChanged(Configuration newConfig) {
+        if (!mPlugins.isEmpty()) {
+            for (IPlugin p : mPlugins) {
+                p.onLifeConfigurationChanged(newConfig);
             }
         }
     }

@@ -1,6 +1,7 @@
 package me.erwa.source.erlanggod.player.widget.plugin;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -86,6 +87,10 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     @Override
     public void onLifeResume(Context context) {
         this.mContext = context;
+    }
+
+    @Override
+    public void onLifeConfigurationChanged(Configuration newConfig) {
     }
 
     @Override

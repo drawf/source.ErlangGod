@@ -1,5 +1,6 @@
 package me.erwa.source.erlanggod.player;
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.pili.pldroid.player.widget.PLVideoView;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -35,9 +37,10 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.PracticeTipsBa
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ScrubController;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.ShapeController;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ShareButton;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.TitleText;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VipTipsBar;
 
 /**
@@ -71,6 +74,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
     private void init() {
 //        mBinding.videoView.setAVOptions(OptionsManager.newInstance().setAutoStart(true).build());
         mBinding.videoView.setVideoPath("");//need to call this to init plugins
+        mBinding.videoView.setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_16_9);
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileL/mobileL_586d5aa4065b7e9d714294fc.m3u8");
 //        mBinding.videoView.setVideoPath("https://hls.media.yangcong345.com/mobileM/mobileM_58c26cbb36eaf35866aae116.m3u8");
 //        mBinding.videoView.setVideoPath("https://o558dvxry.qnssl.com/pcM/pcM_584f96fbefdf207b0822cf7a.m3u8");
@@ -182,6 +186,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new PracticeTipsBar());
         mediaControllerBoard.addPlugin(new VipTipsBar());
         mediaControllerBoard.addPlugin(new ScrubController());
+        mediaControllerBoard.addPlugin(new ShapeController());
 
         mBinding.btnShow.setOnClickListener(this);
         mBinding.btnHide.setOnClickListener(this);
@@ -229,5 +234,11 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         Gson gson = new Gson();
         HashMap<String, Object> map = gson.fromJson(jsonStr, type);
         return map;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mediaControllerBoard.onLifeConfigurationChanged(newConfig);
     }
 }

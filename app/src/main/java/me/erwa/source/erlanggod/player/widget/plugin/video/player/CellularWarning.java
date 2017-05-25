@@ -9,7 +9,6 @@ import com.pili.pldroid.player.PLMediaPlayer;
 
 import me.erwa.source.erlanggod.R;
 import me.erwa.source.erlanggod.databinding.MediaControllerCellularWarningBinding;
-import me.erwa.source.erlanggod.utils.NetUtils;
 
 /**
  * Created by drawf on 2017/5/19.
@@ -35,24 +34,38 @@ public class CellularWarning extends BaseVideoPlayerPlugin {
     @Override
     public void onPreparedListener(PLMediaPlayer plMediaPlayer) {
         super.onPreparedListener(plMediaPlayer);
+        prepared = true;
         working();
+    }
+
+    @Override
+    public void onCompletionListener(PLMediaPlayer plMediaPlayer) {
+        super.onCompletionListener(plMediaPlayer);
+        prepared = false;
     }
 
     private boolean shouldWarning() {
         //读取用户设置偏好 UserPreferences.getBoolean(UserPreferences.KEY_CELLULAR_VIDEO_OPERATION_ENABLE);
         //当前是否为蜂窝网络状态
-        return NetUtils.getType().equals(NetUtils.TYPE_CELLULAR);
+//        return NetUtils.getType().equals(NetUtils.TYPE_CELLULAR);
+        return true;
     }
+
+    private AlertDialog dialog;
+    private boolean prepared;
 
     private void working() {
         if (!shouldWarning()) return;
+        if (mBoard.mVideoView.getTag() == null) return;
+        if (!prepared) return;
+        if (dialog != null && dialog.isShowing()) return;
 
         doAction(PlayButton.ACTION_DO_PAUSE);
 
         final MediaControllerCellularWarningBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext),
                 R.layout.media_controller_cellular_warning, null, false);
 
-        new AlertDialog.Builder(mContext)
+        dialog = new AlertDialog.Builder(mContext)
                 .setTitle("网络提示")
                 .setIcon(R.mipmap.ic_launcher)
                 .setView(binding.getRoot())

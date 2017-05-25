@@ -126,6 +126,7 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         String url = (String) fetchData(ScrubController.ACTION_FETCH_CURRENT_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
+        mBoard.mVideoView.setTag(url);
         if (seekTemp > 0) {
             mBoard.mVideoView.seekTo(seekTemp);
         }
@@ -141,6 +142,7 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
+        mBoard.mVideoView.setTag(url);
     }
 
     private void doPlayPre() {
@@ -153,5 +155,6 @@ public class PlayerController extends BaseVideoPlayerPlugin {
         String url = (String) fetchData(VideoData.ACTION_FETCH_END_URL);
         mBoard.mVideoView.stopPlayback();
         mBoard.mVideoView.setVideoPath(url);
+        mBoard.mVideoView.setTag(url);
     }
 }

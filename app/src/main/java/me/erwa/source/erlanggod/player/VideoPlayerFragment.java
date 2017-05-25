@@ -35,8 +35,9 @@ import me.erwa.source.erlanggod.player.widget.plugin.video.player.PracticeTipsBa
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ProgressBar;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.QualityMode;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.ScrubController;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.ShareButton;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoData;
-import me.erwa.source.erlanggod.player.widget.plugin.video.player.VideoTitle;
+import me.erwa.source.erlanggod.player.widget.plugin.video.player.TitleText;
 import me.erwa.source.erlanggod.player.widget.plugin.video.player.VipTipsBar;
 
 /**
@@ -160,7 +161,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
 
         mediaControllerBoard.addPlugin(new PlayerController(), 1);
 
-        mediaControllerBoard.addPlugin(new VideoTitle());
+        mediaControllerBoard.addPlugin(new TitleText());
         mediaControllerBoard.addPlugin(new VideoData(json2Map(info)));
 
         mediaControllerBoard.addPlugin(new CloseButton());
@@ -168,6 +169,7 @@ public class VideoPlayerFragment extends Fragment implements View.OnClickListene
         mediaControllerBoard.addPlugin(new ProgressBar());
         mediaControllerBoard.addPlugin(new LoadingPanel());
         mediaControllerBoard.addPlugin(new DownloadButton());
+        mediaControllerBoard.addPlugin(new ShareButton());
         mediaControllerBoard.addPlugin(new GesturePanel());
         mediaControllerBoard.addPlugin(new Interaction());
         mediaControllerBoard.addPlugin(new PlayButton());

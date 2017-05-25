@@ -106,6 +106,7 @@ public class BasePlugin<B extends ViewDataBinding> implements MediaControllerBoa
     protected static final int BASE_ACTION_JUMP_OVER_BUTTON = 1100;
     protected static final int BASE_ACTION_SCRUB_CONTROLLER = 1200;
     protected static final int BASE_ACTION_DOWNLOAD_BUTTON = 1300;
+    protected static final int BASE_ACTION_SHARE_BUTTON = 1400;
 
     /**
      * 发出的动作命令

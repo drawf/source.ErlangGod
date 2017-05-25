@@ -5,7 +5,7 @@ package me.erwa.source.erlanggod.player.widget.plugin.video.player;
  * ------------------------------
  */
 
-public class VideoTitle extends BaseVideoPlayerPlugin {
+public class TitleText extends BaseVideoPlayerPlugin {
 
     @Override
     public void doInit() {
